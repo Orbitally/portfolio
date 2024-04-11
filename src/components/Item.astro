@@ -1,15 +1,17 @@
 ---
 const { title, subtitle, date, image } = Astro.props;
+
+const lowerTitle = title.toLowerCase().replace(/ /g, '-');
 ---
 
-<div class="item">
+<a class="item" href=`/projects/${lowerTitle}`>
   <div class="text">
     <p class="title">{title}</p>
     <p class="subtitle">{subtitle}</p>
     <p class="date">{date}</p>
   </div>
   <img src={image} alt="" />
-</div>
+</a>
 
 <style>
   .item {
@@ -18,9 +20,16 @@ const { title, subtitle, date, image } = Astro.props;
     overflow: hidden;
     border-radius: 10px;
     position: relative;
+    filter: grayscale(100%);
+    transition-duration: 0.4s;
+  }
+  .item:hover {
+    filter: none;
+    cursor: pointer;
+    transition-duration: 0.4s;
   }
   p {
-    color: black;
+    color: white;
   }
   .text {
     position: absolute;
@@ -48,5 +57,12 @@ const { title, subtitle, date, image } = Astro.props;
     height: 100%;
     object-fit: cover;
     position: relative;
+    transition-duration: 0.4s;
+  }
+  img:hover {
+    height: 105%;
+    width: 105%;
+    transition-duration: 0.4s;
+    scale: 105%;
   }
 </style>
