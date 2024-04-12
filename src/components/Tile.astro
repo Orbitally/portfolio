@@ -4,7 +4,7 @@ const { title, subtitle, date, image } = Astro.props;
 const lowerTitle = title.toLowerCase().replace(/ /g, '-');
 ---
 
-<a class="item" href=`/projects/${lowerTitle}`>
+<a class="tile">
   <div class="text">
     <p class="title">{title}</p>
     <p class="subtitle">{subtitle}</p>
@@ -14,7 +14,7 @@ const lowerTitle = title.toLowerCase().replace(/ /g, '-');
 </a>
 
 <style>
-  .item {
+  .tile {
     width: 200px;
     height: 200px;
     overflow: hidden;
@@ -23,7 +23,7 @@ const lowerTitle = title.toLowerCase().replace(/ /g, '-');
     filter: grayscale(100%);
     transition-duration: 0.4s;
   }
-  .item:hover {
+  .tile:hover {
     filter: none;
     cursor: pointer;
     transition-duration: 0.4s;

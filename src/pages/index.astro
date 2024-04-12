@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ItemBox from '../components/Item.astro';
+import ItemBox from '../components/Tile.astro';
 ---
 
 <Layout>
+  <script src="../js/reuseTile.js"></script>
   <main>
     <div class="navbar">
       <div class="leftside">
@@ -17,7 +18,45 @@ import ItemBox from '../components/Item.astro';
       </div>
     </div>
     <div class="content">
-      <div class="col-1">
+      <div class="col-1" style="margin-top: -83px;">
+        <ItemBox
+          title="1"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
+        <ItemBox
+          title="2"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
+        <ItemBox
+          title="3"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
+        <ItemBox
+          title="4"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
+      </div>
+      <div class="col-2" style="margin-top: -2px;">
+        <ItemBox
+          title="Thing"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
+        <ItemBox
+          title="Thing"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
         <ItemBox
           title="Thing"
           subtitle="Stuff"
@@ -31,7 +70,7 @@ import ItemBox from '../components/Item.astro';
           image="https://source.unsplash.com/random"
         />
       </div>
-      <div class="col-2">
+      <div class="col-3" style="margin-top: -35px;">
         <ItemBox
           title="Thing"
           subtitle="Stuff"
@@ -39,13 +78,11 @@ import ItemBox from '../components/Item.astro';
           image="https://source.unsplash.com/random"
         />
         <ItemBox
-          title="Thing"
+          title="Thing Other"
           subtitle="Stuff"
           date="1/2/3"
           image="https://source.unsplash.com/random"
         />
-      </div>
-      <div class="col-3">
         <ItemBox
           title="Thing"
           subtitle="Stuff"
@@ -59,7 +96,19 @@ import ItemBox from '../components/Item.astro';
           image="https://source.unsplash.com/random"
         />
       </div>
-      <div class="col-4">
+      <div class="col-4" style="margin-top: 50px;">
+        <ItemBox
+          title="Other other Thing"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
+        <ItemBox
+          title="Thing"
+          subtitle="Stuff"
+          date="1/2/3"
+          image="https://source.unsplash.com/random"
+        />
         <ItemBox
           title="Other other Thing"
           subtitle="Stuff"
@@ -80,6 +129,8 @@ import ItemBox from '../components/Item.astro';
 <style>
   main {
     padding: 2rem;
+    padding-top: 0;
+    margin-top: 0;
     color: white;
     font-size: 20px;
     line-height: 1.6;
@@ -87,6 +138,11 @@ import ItemBox from '../components/Item.astro';
     grid-template-rows: auto;
     align-items: center;
     justify-content: center;
+  }
+  .navbar {
+    z-index: 5;
+    background-color: white;
+    padding-top: 5vh;
   }
   .navbar a {
     text-decoration: transparent;
@@ -120,5 +176,26 @@ import ItemBox from '../components/Item.astro';
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 20px;
+    animation-name: slideUp;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-timing-function: linear;
+  }
+
+  [class^='col-']:hover {
+    animation-play-state: paused;
+  }
+
+  .col-1 {
+    animation-duration: 210s;
+  }
+  .col-2 {
+    animation-duration: 170s;
+  }
+  .col-3 {
+    animation-duration: 200s;
+  }
+  .col-4 {
+    animation-duration: 180s;
   }
 </style>
