@@ -1,10 +1,8 @@
 ---
-const { title, subtitle, date, image } = Astro.props;
-
-const lowerTitle = title.toLowerCase().replace(/ /g, '-');
+const { title, subtitle, date, image, slug } = Astro.props;
 ---
 
-<a class="tile">
+<a class="tile" href=`/projects/${slug}`>
   <div class="text">
     <p class="title">{title}</p>
     <p class="subtitle">{subtitle}</p>
