@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ItemBox from '../components/Tile.astro';
+
 import '../css/animations.css';
 
 import { contentfulClient } from '../lib/contentful';
@@ -48,82 +49,36 @@ const tiles = entires.items.map((item) => {
         }
       </div>
       <div class="col-2" style="margin-top: -2px;">
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
+        {
+          // map all the tiles that are in column one to the ItemBox component
+          tiles
+            .filter((tile) => tile.columnNumber === 2)
+            .map((tile) => (
+              <ItemBox
+                title={tile.title}
+                subtitle={tile.subtitle}
+                date={tile.date}
+                image={`${tile.image.fields.file.url}?fm=jpg&fl=progressive`}
+                slug={tile.slug}
+              />
+            ))
+        }
       </div>
       <div class="col-3" style="margin-top: -35px;">
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing Other"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing Other"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-      </div>
-      <div class="col-4" style="margin-top: 50px;">
-        <ItemBox
-          title="Other other Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Other other Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
-        <ItemBox
-          title="Thing"
-          subtitle="Stuff"
-          date="1/2/3"
-          image="https://source.unsplash.com/random"
-        />
+        {
+          // map all the tiles that are in column one to the ItemBox component
+          tiles
+            .filter((tile) => tile.columnNumber === 3)
+            .map((tile) => (
+              <ItemBox
+                title={tile.title}
+                subtitle={tile.subtitle}
+                date={tile.date}
+                image={`${tile.image.fields.file.url}?fm=jpg&fl=progressive`}
+                slug={tile.slug}
+              />
+            ))
+        }
       </div>
     </div>
   </main>
