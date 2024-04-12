@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ItemBox from '../components/Tile.astro';
+import '../css/animations.css';
 
 import { contentfulClient } from '../lib/contentful';
 import type { Tile } from '../lib/contentful';
@@ -10,8 +11,8 @@ const entires = await contentfulClient.getEntries<Tile>({
 });
 
 const tiles = entires.items.map((item) => {
-  const { title, subtitle, date, image, slug } = item.fields;
-  return { title, subtitle, date, image, slug };
+  const { title, subtitle, date, image, slug, columnNumber } = item.fields;
+  return { title, subtitle, date, image, slug, columnNumber };
 });
 ---
 
@@ -32,15 +33,18 @@ const tiles = entires.items.map((item) => {
     <div class="content">
       <div class="col-1" style="margin-top: -83px;">
         {
-          tiles.map((tile) => (
-            <ItemBox
-              title={tile.title}
-              subtitle={tile.subtitle}
-              date={tile.date}
-              image={`https://${tile.image.fields.file.url}?fm=jpg&fl=progressive`}
-              slug={tile.slug}
-            />
-          ))
+          // map all the tiles that are in column one to the ItemBox component
+          tiles
+            .filter((tile) => tile.columnNumber === 1)
+            .map((tile) => (
+              <ItemBox
+                title={tile.title}
+                subtitle={tile.subtitle}
+                date={tile.date}
+                image={`${tile.image.fields.file.url}?fm=jpg&fl=progressive`}
+                slug={tile.slug}
+              />
+            ))
         }
       </div>
       <div class="col-2" style="margin-top: -2px;">
