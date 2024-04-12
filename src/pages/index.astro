@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import ItemBox from '../components/Tile.astro';
 
 import '../css/animations.css';
+// import '../js/reuseTile.js';
 
 import { contentfulClient } from '../lib/contentful';
 import type { Tile } from '../lib/contentful';
@@ -18,7 +19,7 @@ const tiles = entires.items.map((item) => {
 ---
 
 <Layout>
-  <script src="../js/reuseTile.js"></script>
+  <!-- <script src="../js/reuseTile.js"></script> -->
   <main>
     <div class="navbar">
       <div class="leftside">

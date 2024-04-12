@@ -1,11 +1,11 @@
-// const colOne = document.querySelector('.col-1');
+const colOne = document.querySelector('.col-1');
 
-// let toMove = colOne.firstElementChild;
+let toMove = colOne.firstElementChild;
 
-// let observer = new IntersectionObserver(function (tiles) {
-//   if (!tiles[0].isIntersecting) {
-//     console.log('not intersecting');
-//   }
-// });
+let observer = new IntersectionObserver(function (tiles) {
+  if (!tiles[0].isIntersecting) {
+    console.log('not intersecting');
+  }
+});
 
-// observer.observe(toMove);
+observer.observe(toMove);
