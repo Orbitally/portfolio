@@ -38,17 +38,23 @@ const tiles = entires.items.map((item) => {
           // map all the tiles that are in column one to the ItemBox component
           tiles
             .filter((tile) => tile.columnNumber === 1)
-            .map((tile) => (
-              <ItemBox
-                title={tile.title}
-                subtitle={tile.subtitle}
-                date={tile.date}
-                slug={tile.slug}
-              />
-            ))
+            .map(
+              (tile) => (
+                console.log(tile.image.fields.file.url),
+                (
+                  <ItemBox
+                    title={tile.title}
+                    subtitle={tile.subtitle}
+                    date={tile.date}
+                    image={`${tile.image.fields.file.url}?fm=jpg&fl=progressive`}
+                    slug={tile.slug}
+                  />
+                )
+              )
+            )
         }
       </div>
-      <!-- <div class="col-2" style="margin-top: -2px;">
+      <div class="col-2" style="margin-top: -2px;">
         {
           // map all the tiles that are in column one to the ItemBox component
           tiles
@@ -79,7 +85,7 @@ const tiles = entires.items.map((item) => {
               />
             ))
         }
-      </div> -->
+      </div>
     </div>
   </main>
 </Layout>
