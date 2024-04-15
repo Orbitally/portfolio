@@ -4,6 +4,7 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import Grid from '../layouts/Grid.astro';
 import ItemBox from '../components/Tile.astro';
+import ProjectFrame from '../components/ProjectFrame.astro';
 
 import '../css/animations.css';
 // import '../js/reuseTile.js';
@@ -101,6 +102,7 @@ const tiles = entires.items.map((item) => {
         }
       </div>
     </Grid>
+    <ProjectFrame />
   </main>
 </Layout>
 
@@ -109,7 +111,6 @@ const tiles = entires.items.map((item) => {
     padding: 2rem;
     padding-top: 0;
     margin-top: 0;
-    color: white;
     font-size: 20px;
     line-height: 1.6;
     display: grid;
@@ -121,6 +122,7 @@ const tiles = entires.items.map((item) => {
     z-index: 5;
     background-color: white;
     padding-top: 5vh;
+    width: 100vw;
   }
   .navbar a {
     text-decoration: transparent;
