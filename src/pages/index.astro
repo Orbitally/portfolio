@@ -6,7 +6,7 @@ import Grid from '../layouts/Grid.astro';
 import ItemBox from '../components/Tile.astro';
 import ProjectFrame from '../components/ProjectFrame.astro';
 
-import '../css/animations.css';
+import '../styles/animations.css';
 // import '../js/reuseTile.js';
 
 import { contentfulClient } from '../lib/contentful';
@@ -24,6 +24,8 @@ const tiles = entires.items.map((item) => {
 
 <Layout>
   <!-- <script src="../js/reuseTile.js"></script> -->
+  <script src="../js/projectFrame.js"></script>
+
   <main>
     <div class="navbar">
       <div class="leftside">
