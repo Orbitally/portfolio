@@ -9,10 +9,10 @@ import '../css/animations.css';
 // import '../js/reuseTile.js';
 
 import { contentfulClient } from '../lib/contentful';
-import type { Tile } from '../lib/contentful';
+import type { Project } from '../lib/contentful';
 
-const entires = await contentfulClient.getEntries<Tile>({
-  content_type: 'tile',
+const entires = await contentfulClient.getEntries<Project>({
+  content_type: 'project',
 });
 
 const tiles = entires.items.map((item) => {

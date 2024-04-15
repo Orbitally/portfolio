@@ -4,20 +4,6 @@ import type { EntryFieldTypes } from 'contentful';
 export interface Project {
   contentTypeId: 'project';
   fields: {
-    image: {
-      fields: {
-        file: {
-          url: string;
-        };
-      };
-    };
-    title: EntryFieldTypes.Text;
-    content: EntryFieldTypes.RichText;
-  };
-}
-export interface Tile {
-  contentTypeId: 'tile';
-  fields: {
     title: EntryFieldTypes.Text;
     subtitle: EntryFieldTypes.Text;
     date: EntryFieldTypes.Date;
@@ -29,6 +15,7 @@ export interface Tile {
       };
     };
     columnNumber: EntryFieldTypes.Integer;
+    content: EntryFieldTypes.RichText;
     slug: EntryFieldTypes.Text;
   };
 }
