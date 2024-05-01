@@ -1,4 +1,5 @@
 ---
+import Layout from '../../layouts/Layout.astro';
 import { contentfulClient } from '../../lib/contentful';
 import type { Project } from '../../lib/contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
@@ -14,7 +15,7 @@ const options = {
         target: { fields },
       },
     }) =>
-      `<img src="${fields.file.url}" height="${fields.file.details.image.height / 10}" width="${fields.file.details.image.width / 10}" alt="${fields.description}"/>`,
+      `<Image src="${fields.file.url}" height="${fields.file.details.image.height / 10}" width="${fields.file.details.image.width / 10}" alt="${fields.description}"/>`,
   },
 };
 
@@ -35,27 +36,37 @@ try {
 }
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{project?.title}</title>
-  </head>
-  <body>
+<Layout>
+  <div class="headerText">
     <h1>{project?.title}</h1>
     <h2>{project?.date}</h2>
-    <img src={project?.image} />
-    <article set:html={project?.content} />
-  </body>
-</html>
+  </div>
+  <img src={project?.image} />
+  <article set:html={project?.content} />
+</Layout>
 
 <style>
   img {
-    width: 50%;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
-  article .blurbImage {
-    width: 50%;
+  article {
+    display: block;
+    position: absolute;
+    top: 105vh;
+  }
+
+  .headerText {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    z-index: 1;
+    color: white;
+    bottom: 0;
   }
 </style>

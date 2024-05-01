@@ -49,7 +49,7 @@ const tiles = entires.items.map((item) => {
                 title={tile.title}
                 subtitle={tile.subtitle}
                 date={tile.date}
-                image={`${tile.image.fields.file.url}?fm=jpg&fl=progressive`}
+                image={`${tile.image.fields.file.url}?fm=webp`}
                 slug={tile.slug}
               />
             ))
@@ -109,6 +109,9 @@ const tiles = entires.items.map((item) => {
 </Layout>
 
 <style>
+  html {
+    overflow: hidden;
+  }
   main {
     padding: 2rem;
     padding-top: 0;
