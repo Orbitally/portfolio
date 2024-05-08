@@ -11,4 +11,7 @@ export default defineConfig({
     },
     maxDuration: 8,
   }),
+  images: {
+    domains: ['images.ctfassets.net', 'cdn.contentful.com'],
+  },
 });
