@@ -3,10 +3,12 @@ export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
 import Grid from '../layouts/Grid.astro';
-import ItemBox from '../components/Tile.astro';
+import Tile from '../components/Tile.astro';
 import ProjectFrame from '../components/ProjectFrame.astro';
 
 import '../styles/animations.css';
+import '../styles/blurry-load.css';
+
 // import '../js/reuseTile.js';
 
 import { contentfulClient } from '../lib/contentful';
@@ -26,6 +28,12 @@ const tiles = entires.items.map((item) => {
   <!-- <script src="../js/reuseTile.js"></script> -->
   <script src="../js/projectFrame.js"></script>
 
+  <script is:inline src="/src/js/blurry-load.js"></script>
+  <script>
+    const blurryImageLoad = new BlurryImageLoad();
+    blurryImageLoad.load();
+  </script>
+
   <main>
     <div class="navbar">
       <div class="leftside">
@@ -41,11 +49,11 @@ const tiles = entires.items.map((item) => {
     <Grid>
       <div class="col-1" style="margin-top: -83px;">
         {
-          // map all the tiles that are in column one to the ItemBox component
+          // map all the tiles that are in column one to the Tile component
           tiles
             .filter((tile) => tile.columnNumber === 1)
             .map((tile) => (
-              <ItemBox
+              <Tile
                 title={tile.title}
                 subtitle={tile.subtitle}
                 date={tile.date}
@@ -57,11 +65,11 @@ const tiles = entires.items.map((item) => {
       </div>
       <div class="col-2" style="margin-top: -2px;">
         {
-          // map all the tiles that are in column one to the ItemBox component
+          // map all the tiles that are in column one to the Tile component
           tiles
             .filter((tile) => tile.columnNumber === 2)
             .map((tile) => (
-              <ItemBox
+              <Tile
                 title={tile.title}
                 subtitle={tile.subtitle}
                 date={tile.date}
@@ -73,11 +81,11 @@ const tiles = entires.items.map((item) => {
       </div>
       <div class="col-3" style="margin-top: -35px;">
         {
-          // map all the tiles that are in column one to the ItemBox component
+          // map all the tiles that are in column one to the Tile component
           tiles
             .filter((tile) => tile.columnNumber === 3)
             .map((tile) => (
-              <ItemBox
+              <Tile
                 title={tile.title}
                 subtitle={tile.subtitle}
                 date={tile.date}
@@ -89,11 +97,11 @@ const tiles = entires.items.map((item) => {
       </div>
       <div class="col-4" style="margin-top: -64px;">
         {
-          // map all the tiles that are in column one to the ItemBox component
+          // map all the tiles that are in column one to the Tile component
           tiles
             .filter((tile) => tile.columnNumber === 4)
             .map((tile) => (
-              <ItemBox
+              <Tile
                 title={tile.title}
                 subtitle={tile.subtitle}
                 date={tile.date}
