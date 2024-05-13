@@ -1,4 +1,4 @@
-class BlurryImageLoad {
+export class BlurryImageLoad {
   supportsCSSFilters(enableWebkit) {
     // Copied from https://stackoverflow.com/a/11047247
     if (enableWebkit === undefined) {

@@ -28,8 +28,8 @@ const tiles = entires.items.map((item) => {
   <!-- <script src="../js/reuseTile.js"></script> -->
   <script src="../js/projectFrame.js"></script>
 
-  <script is:inline src="/src/js/blurry-load.js"></script>
   <script>
+    import { BlurryImageLoad } from '../js/blurry-load.js';
     const blurryImageLoad = new BlurryImageLoad();
     blurryImageLoad.load();
   </script>
