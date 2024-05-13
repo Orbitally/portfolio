@@ -1,5 +1,6 @@
 ---
 import '@fontsource/inter';
+import '../styles/blurry-load.css';
 ---
 
 <!doctype html>
@@ -11,6 +12,12 @@ import '@fontsource/inter';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <title>Jacob Kreindler</title>
+
+    <script>
+      import { BlurryImageLoad } from '../js/blurry-load.js';
+      const blurryImageLoad = new BlurryImageLoad();
+      blurryImageLoad.load();
+    </script>
   </head>
   <body>
     <slot />
