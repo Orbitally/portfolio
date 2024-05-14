@@ -1,6 +1,7 @@
 ---
 import '@fontsource/inter';
 import '../styles/blurry-load.css';
+import 'aos/dist/aos.css';
 ---
 
 <!doctype html>
@@ -21,7 +22,15 @@ import '../styles/blurry-load.css';
   </head>
   <body>
     <slot />
-    <script src="../js/aos.js"></script>
+    <script is:inline src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script is:inline>
+      AOS.init({
+        duration: 600,
+        delay: 100,
+        once: true,
+        offset: 50,
+      });
+    </script>
   </body>
 </html>
 <style is:global>
