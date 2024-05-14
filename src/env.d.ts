@@ -1,7 +1,5 @@
 /// <reference types="astro/client" />
 
-declare module 'aos';
-
 interface ImportMetaEnv {
   readonly CONTENTFUL_SPACE_ID: string;
   readonly CONTENTFUL_DELIVERY_TOKEN: string;
