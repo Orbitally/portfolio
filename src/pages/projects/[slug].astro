@@ -16,7 +16,7 @@ const options = {
         target: { fields },
       },
     }) =>
-      `<Image class="blurry-load" style="margin: 10px 10px 10px 0px; aspect-ratio: 16/9;" src="https://${fields.file.url}?fm=jpg&fl=progressive&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=jpg&fl=progressive&w=1920&h=1080&q=35 width="40%" alt="${fields.description}"/>`,
+      `<Image data-aos="fade-up" class="blurry-load" style="margin: 10px 10px 10px 0px; aspect-ratio: 16/9;" src="https://${fields.file.url}?fm=jpg&fl=progressive&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=jpg&fl=progressive&w=1920&h=1080&q=35 width="40%" alt="${fields.description}"/>`,
   },
 };
 
