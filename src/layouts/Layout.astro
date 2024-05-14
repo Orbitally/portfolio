@@ -1,7 +1,6 @@
 ---
 import '@fontsource/inter';
 import '../styles/blurry-load.css';
-import 'aos/dist/aos.css';
 ---
 
 <!doctype html>
@@ -11,6 +10,8 @@ import 'aos/dist/aos.css';
     <meta name="description" content="Jacob Kreindler's Portfolio" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="stylesheet" href="https://unpkg.com/aos/dist/aos.css" />
 
     <title>Jacob Kreindler</title>
 
@@ -22,7 +23,7 @@ import 'aos/dist/aos.css';
   </head>
   <body>
     <slot />
-    <script is:inline src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script is:inline src="https://unpkg.com/aos/dist/aos.js"></script>
     <script is:inline>
       AOS.init({
         duration: 600,
