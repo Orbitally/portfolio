@@ -30,7 +30,7 @@ const tiles = entires.items.map((item) => {
   <main>
     <Navbar />
     <Grid>
-      <div class="col-1" style="margin-top: -83px;">
+      <div class="col-1">
         {
           // map all the tiles that are in column one to the Tile component
           tiles
@@ -46,7 +46,7 @@ const tiles = entires.items.map((item) => {
             ))
         }
       </div>
-      <div class="col-2" style="margin-top: -2px;">
+      <div class="col-2">
         {
           // map all the tiles that are in column one to the Tile component
           tiles
@@ -62,7 +62,7 @@ const tiles = entires.items.map((item) => {
             ))
         }
       </div>
-      <div class="col-3" style="margin-top: -35px;">
+      <div class="col-3">
         {
           // map all the tiles that are in column one to the Tile component
           tiles
@@ -78,7 +78,7 @@ const tiles = entires.items.map((item) => {
             ))
         }
       </div>
-      <div class="col-4" style="margin-top: -64px;">
+      <div class="col-4">
         {
           // map all the tiles that are in column one to the Tile component
           tiles
@@ -116,9 +116,9 @@ const tiles = entires.items.map((item) => {
   }
   /* apply to all classes that start with 'col-' */
   [class^='col-'] {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     animation-name: slideUp;
     animation-iteration-count: infinite;
     animation-direction: normal;
@@ -131,14 +131,23 @@ const tiles = entires.items.map((item) => {
 
   .col-1 {
     animation-duration: 210s;
+    margin-top: -83px;
+  }
+  @media screen and (max-width: 815px) {
+    .col-1 {
+      margin-top: 0px;
+    }
   }
   .col-2 {
     animation-duration: 170s;
+    margin-top: -2px;
   }
   .col-3 {
     animation-duration: 200s;
+    margin-top: -35px;
   }
   .col-4 {
     animation-duration: 180s;
+    margin-top: -64px;
   }
 </style>
