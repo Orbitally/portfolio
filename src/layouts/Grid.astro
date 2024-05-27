@@ -3,19 +3,26 @@
 </div>
 <style>
   .grid {
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     position: absolute;
     top: 5vh;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: center;
     justify-items: center;
+    column-gap: 8vw;
     margin-top: 5vh;
     width: 90vw;
     height: auto;
   }
-
-  @media screen and (max-width: 1052px) {
+  @media (max-width: 1052px) {
     .grid {
-      grid-template-columns: 1fr 1fr 1fr;
+      row-gap: 20vh;
+    }
+  }
+  @media (max-width: 480px) {
+    .grid {
+      row-gap: 10vh;
     }
   }
 </style>

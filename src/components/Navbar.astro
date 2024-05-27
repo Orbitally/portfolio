@@ -1,0 +1,52 @@
+<div class="navbar">
+  <div class="leftside">
+    <a href="/">Jacob Kreindler</a>
+  </div>
+  <div class="rightside">
+    <a href="/about">About</a>
+    <a href="/projects">Projects</a>
+    <a href="/resume">Resume</a>
+    <a href="/contact">Contact</a>
+  </div>
+</div>
+
+<style>
+  @media screen and (max-width: 615px) {
+    .navbar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .navbar .leftside {
+      margin-left: 0px !important;
+    }
+    .navbar .rightside {
+      margin-right: 0px !important;
+    }
+  }
+
+  .navbar {
+    z-index: 5;
+    background-color: white;
+    padding-top: 5vh;
+    width: 100vw;
+  }
+  .navbar a {
+    text-decoration: transparent;
+    color: black;
+    padding: 0.5rem;
+    transition-duration: 500ms;
+  }
+  .navbar a:hover {
+    text-decoration: underline;
+    transition-duration: 500ms;
+  }
+  .navbar .leftside {
+    float: left;
+    margin-left: 20px;
+  }
+  .navbar .rightside {
+    float: right;
+    margin-right: 20px;
+  }
+</style>

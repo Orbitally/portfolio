@@ -4,6 +4,7 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import Grid from '../layouts/Grid.astro';
 import Tile from '../components/Tile.astro';
+import Navbar from '../components/Navbar.astro';
 import ProjectFrame from '../components/ProjectFrame.astro';
 
 import '../styles/animations.css';
@@ -26,19 +27,8 @@ const tiles = entires.items.map((item) => {
 <Layout>
   <!-- <script src="../js/reuseTile.js"></script> -->
   <script src="../js/projectFrame.js"></script>
-
   <main>
-    <div class="navbar">
-      <div class="leftside">
-        <a href="/">Jacob Kreindler</a>
-      </div>
-      <div class="rightside">
-        <a href="/about">About</a>
-        <a href="/projects">Projects</a>
-        <a href="/resume">Resume</a>
-        <a href="/contact">Contact</a>
-      </div>
-    </div>
+    <Navbar />
     <Grid>
       <div class="col-1" style="margin-top: -83px;">
         {
@@ -124,31 +114,6 @@ const tiles = entires.items.map((item) => {
     align-items: center;
     justify-content: center;
   }
-  .navbar {
-    z-index: 5;
-    background-color: white;
-    padding-top: 5vh;
-    width: 100vw;
-  }
-  .navbar a {
-    text-decoration: transparent;
-    color: black;
-    padding: 0.5rem;
-    transition-duration: 500ms;
-  }
-  .navbar a:hover {
-    text-decoration: underline;
-    transition-duration: 500ms;
-  }
-  .navbar .leftside {
-    float: left;
-    margin-left: 20px;
-  }
-  .navbar .rightside {
-    float: right;
-    margin-right: 20px;
-  }
-
   /* apply to all classes that start with 'col-' */
   [class^='col-'] {
     display: grid;
