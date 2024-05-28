@@ -103,6 +103,11 @@ const tiles = entires.items.map((item) => {
   html {
     overflow: hidden;
   }
+  @media screen and (max-width: 483px) {
+    html {
+      overflow: scroll;
+    }
+  }
   main {
     padding: 2rem;
     padding-top: 0;
@@ -136,6 +141,11 @@ const tiles = entires.items.map((item) => {
   @media screen and (max-width: 815px) {
     .col-1 {
       margin-top: 0px;
+    }
+  }
+  @media screen and (max-width: 483px) {
+    .col-4 {
+      margin-top: 0px !important;
     }
   }
   .col-2 {
