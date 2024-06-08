@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, imageConfig } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import { contentfulClient } from '../../lib/contentful';
 import type { Project } from '../../lib/contentful';
@@ -57,7 +57,7 @@ try {
     height={100}
     loading="eager"
     data-large=`${project?.image}?fm=webp&q=50`
-    src=`${project?.image}?fm=jpg&fl=progressive&w=500&h=500&q=5`
+    src=`${project?.image}?fm=webp&w=1920&h=1080&q=5`
   />
   <center>
     {
@@ -81,8 +81,8 @@ try {
                   width={100}
                   height={100}
                   loading="lazy"
-                  data-large={`https:${image.fields.file.url}?fm=webp&w=1920&h=1080&q=25&fit=fill`}
-                  src={`https:${image.fields.file.url}?fm=webp&w=480&h=270&q=2&fit=fill`}
+                  data-large={`${image.fields.file.url}?fm=webp&w=960&h=540&q=50&fit=fill`}
+                  src={`${image.fields.file.url}?fm=webp&w=240&h=135&q=2&fit=fill`}
                   aspect-ratio="3/2"
                 />
               ))}
@@ -102,8 +102,8 @@ try {
                   width={image.fields.file.details.image.width}
                   height={image.fields.file.details.image.height}
                   loading="lazy"
-                  data-large={`https:${image.fields.file.url}?fm=webp&w=1080&h=1920&q=25&fit=pad`}
-                  src={`https:${image.fields.file.url}?fm=webp&w=270&h=480&q=2&fit=pad`}
+                  data-large={`${image.fields.file.url}?fm=webp&w=540&h=960&q=50&fit=fill`}
+                  src={`${image.fields.file.url}?fm=webp&w=135&h=240&q=2&fit=fill`}
                   aspect-ratio="2/3"
                 />
               ))}
