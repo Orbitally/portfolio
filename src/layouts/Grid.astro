@@ -3,26 +3,12 @@
 </div>
 <style>
   .grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    position: absolute;
-    top: 5vh;
+    display: grid;
+    grid-template-columns: 23vw 23vw 23vw 23vw;
+    grid-template-rows: auto;
+    column-gap: 0.5vw;
+    row-gap: 2vh;
     justify-content: center;
-    justify-items: center;
-    column-gap: 8vw;
-    margin-top: 5vh;
-    width: 90vw;
-    height: auto;
-  }
-  @media (max-width: 1052px) {
-    .grid {
-      row-gap: 12vh;
-    }
-  }
-  @media (max-width: 480px) {
-    .grid {
-      row-gap: 10vh;
-    }
+    align-items: center;
   }
 </style>
