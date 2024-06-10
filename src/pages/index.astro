@@ -16,6 +16,8 @@ import type { Project } from '../lib/contentful';
 
 const entires = await contentfulClient.getEntries<Project>({
   content_type: 'project',
+  //@ts-ignore
+  order: '-fields.date',
 });
 
 const tiles = entires.items.map((item) => {
@@ -30,70 +32,18 @@ const tiles = entires.items.map((item) => {
   <main>
     <Navbar />
     <Grid>
-      <div class="col-1">
-        {
-          // map all the tiles that are in column one to the Tile component
-          tiles
-            .filter((tile) => tile.columnNumber === 1)
-            .map((tile) => (
-              <Tile
-                title={tile.title}
-                subtitle={tile.subtitle}
-                date={tile.date}
-                image={`${tile.image.fields.file.url}`}
-                slug={tile.slug}
-              />
-            ))
-        }
-      </div>
-      <div class="col-2">
-        {
-          // map all the tiles that are in column one to the Tile component
-          tiles
-            .filter((tile) => tile.columnNumber === 2)
-            .map((tile) => (
-              <Tile
-                title={tile.title}
-                subtitle={tile.subtitle}
-                date={tile.date}
-                image={`${tile.image.fields.file.url}`}
-                slug={tile.slug}
-              />
-            ))
-        }
-      </div>
-      <div class="col-3">
-        {
-          // map all the tiles that are in column one to the Tile component
-          tiles
-            .filter((tile) => tile.columnNumber === 3)
-            .map((tile) => (
-              <Tile
-                title={tile.title}
-                subtitle={tile.subtitle}
-                date={tile.date}
-                image={`${tile.image.fields.file.url}`}
-                slug={tile.slug}
-              />
-            ))
-        }
-      </div>
-      <div class="col-4">
-        {
-          // map all the tiles that are in column one to the Tile component
-          tiles
-            .filter((tile) => tile.columnNumber === 4)
-            .map((tile) => (
-              <Tile
-                title={tile.title}
-                subtitle={tile.subtitle}
-                date={tile.date}
-                image={`${tile.image.fields.file.url}`}
-                slug={tile.slug}
-              />
-            ))
-        }
-      </div>
+      {
+        // map all the tiles that are in column one to the Tile component
+        tiles.map((tile) => (
+          <Tile
+            title={tile.title}
+            subtitle={tile.subtitle}
+            date={tile.date}
+            image={`${tile.image.fields.file.url}`}
+            slug={tile.slug}
+          />
+        ))
+      }
     </Grid>
     <ProjectFrame />
   </main>
@@ -104,6 +54,9 @@ const tiles = entires.items.map((item) => {
     html {
       overflow: scroll;
     }
+  }
+  html {
+    overflow: hidden;
   }
   main {
     padding: 2rem;
@@ -116,7 +69,6 @@ const tiles = entires.items.map((item) => {
     align-items: center;
     justify-content: center;
   }
-  /* apply to all classes that start with 'col-' */
   [class^='col-'] {
     display: flex;
     flex-direction: column;
