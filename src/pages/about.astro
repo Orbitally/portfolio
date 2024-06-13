@@ -1,17 +1,58 @@
 ---
+import { Image } from 'astro:assets';
 import Navbar from '../components/Navbar.astro';
 import Layout from '../layouts/Layout.astro';
+
+import { contentfulClient } from '../lib/contentful';
+import type { About } from '../lib/contentful';
+
+let about;
+
+try {
+  const data = await contentfulClient.getEntries<About>({
+    content_type: 'about',
+  });
+  const { aboutParagraph, image } = data.items[0].fields;
+  about = {
+    aboutParagraph,
+    image: image.fields.file.url,
+  };
+} catch (error) {
+  console.error(error);
+}
 ---
 
 <Layout>
   <Navbar />
-  <h1>Hi! I'm Jacob</h1>
-  <p>
-    Hi i'm Jacob! I love photography, 3D printing, robotics, and aviation.
-    Beyond my love for technology and design, I like to hide behind the lens of
-    a camera, capturing frozen moments in the hopes of telling a story. Whether
-    it's exploring the vibrant colors and patterns of nature and architecture or
-    experimenting with different angles and lenses, photography gives me a way
-    to see the world in new and interesting ways.
-  </p>
+  <div class="container">
+    <div>
+      <h1>Hi! I'm Jacob</h1>
+      <p>
+        {
+          // Render the about paragraph
+          about?.aboutParagraph
+        }
+      </p>
+    </div>
+    <div>
+      <Image
+        class="blurry-load"
+        alt=""
+        width={100}
+        height={100}
+        loading="eager"
+        data-large=`${about?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
+        src=`${about?.image}?fm=webp&w=1920&h=1080&q=5&fit=fill`
+      />
+    </div>
+  </div>
+
+  <style>
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </Layout>

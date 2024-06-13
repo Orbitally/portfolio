@@ -21,6 +21,14 @@ export interface Project {
   };
 }
 
+export interface About {
+  contentTypeId: 'about';
+  fields: {
+    aboutParagraph: EntryFieldTypes.Text;
+    image: EntryFieldTypes.AssetLink;
+  };
+}
+
 export const contentfulClient = contentful.createClient({
   space: import.meta.env.CONTENTFUL_SPACE_ID,
   accessToken: import.meta.env.DEV
