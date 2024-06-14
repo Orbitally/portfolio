@@ -34,30 +34,31 @@ try {
         }
       </p>
     </div>
+    <Image
+      class="blurry-load"
+      alt=""
+      width={1920}
+      height={1080}
+      aspect-ratio="16/9"
+      loading="eager"
+      data-large=`${about?.image}?fm=webp&w=1920&h=1080&q=65`
+      src=`${about?.image}?fm=webp&w=1920&h=1080&q=5`
+    />
   </div>
-  <img
-    class="blurry-load"
-    alt=""
-    aspect-ratio="16/9"
-    loading="eager"
-    data-large=`${about?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
-    src=`${about?.image}?fm=webp&w=1920&h=1080&q=5&fit=fill`
-  />
-
   <style>
     html {
       overflow: hidden;
     }
     .container {
       display: flex;
+      width: 100vw;
+      margin: 28px;
+      margin-top: 12vh;
       flex-direction: row;
       justify-content: center;
       align-items: center;
     }
     img {
-      position: absolute;
-      top: 45vh;
-      right: 0;
       width: 50%;
       height: auto;
       filter: grayscale(100);
