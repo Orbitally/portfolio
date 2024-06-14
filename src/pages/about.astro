@@ -45,27 +45,38 @@ try {
       src=`${about?.image}?fm=webp&w=1920&h=1080&q=5`
     />
   </div>
+
   <style>
     html {
       overflow: hidden;
     }
     .container {
+      position: absolute;
+      left: 0;
+      top: 0;
       display: flex;
       width: 100vw;
-      margin: 28px;
-      margin-top: 17vw;
+      height: 100vh;
+      padding: 20px;
+      margin-top: 5vw;
       flex-direction: row;
       justify-content: center;
       align-items: center;
     }
-    @media screen and (max-width: 826px) {
+    @media screen and (max-width: 445px) {
       .container {
         flex-direction: column;
-        margin-top: 12vw;
+        margin-top: 10vw;
       }
       img {
         width: 100% !important;
         z-index: -1;
+      }
+      h1 {
+        text-align: center;
+      }
+      p {
+        text-align: center;
       }
     }
     img {
