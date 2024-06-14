@@ -53,10 +53,20 @@ try {
       display: flex;
       width: 100vw;
       margin: 28px;
-      margin-top: 12vh;
+      margin-top: 17vw;
       flex-direction: row;
       justify-content: center;
       align-items: center;
+    }
+    @media screen and (max-width: 826px) {
+      .container {
+        flex-direction: column;
+        margin-top: 12vw;
+      }
+      img {
+        width: 100% !important;
+        z-index: -1;
+      }
     }
     img {
       width: 50%;
