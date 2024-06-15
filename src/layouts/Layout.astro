@@ -1,4 +1,6 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
 import '@fontsource/inter';
 import '../styles/blurry-load.css';
 ---
@@ -20,6 +22,8 @@ import '../styles/blurry-load.css';
       const blurryImageLoad = new BlurryImageLoad();
       blurryImageLoad.load();
     </script>
+
+    <ViewTransitions />
   </head>
   <body>
     <slot />
@@ -32,14 +36,14 @@ import '../styles/blurry-load.css';
         offset: 50,
       });
     </script>
+    <style is:global>
+      html {
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
+      body {
+        margin-top: 0;
+      }
+    </style>
   </body>
 </html>
-<style is:global>
-  html {
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
-  body {
-    margin-top: 0;
-  }
-</style>
