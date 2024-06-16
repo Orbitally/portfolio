@@ -155,11 +155,9 @@ import '../styles/blurry-load.css';
         font-family: 'Inter', sans-serif;
         overflow-x: hidden;
       }
-      body {
-        margin-top: 0;
-      }
 
       body {
+        margin-top: 0;
         --sb-track-color: #91a1a9;
         --sb-thumb-color: #495a69;
         --sb-size: 14px;
@@ -171,12 +169,11 @@ import '../styles/blurry-load.css';
 
       body::-webkit-scrollbar-track {
         background: var(--sb-track-color);
-        border-radius: 10px;
       }
 
       body::-webkit-scrollbar-thumb {
         background: var(--sb-thumb-color);
-        border-radius: 10px;
+        border-radius: 5px;
       }
 
       @supports not selector(::-webkit-scrollbar) {
