@@ -35,14 +35,12 @@ try {
       </p>
     </div>
     <Image
-      class="blurry-load"
       alt=""
       width={1920}
       height={1080}
       aspect-ratio="16/9"
       loading="eager"
-      data-large=`${about?.image}?fm=webp&w=1920&h=1080&q=65`
-      src=`${about?.image}?fm=webp&w=1920&h=1080&q=5`
+      src=`${about?.image}?fm=webp&w=1920&h=1080&q=65`
     />
   </div>
 
@@ -63,7 +61,7 @@ try {
       align-items: center;
       z-index: 0;
     }
-    @media screen and (max-width: 615px) {
+    @media screen and (max-width: 754px) {
       .container {
         flex-direction: column;
         margin-top: 10vw;
