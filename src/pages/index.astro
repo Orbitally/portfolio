@@ -47,18 +47,17 @@ const tiles = entires.items.map((item) => {
         ))
       }
     </Grid>
+    <center>
+      <p>More albums coming soon 👀</p>
+    </center>
     <ProjectFrame />
   </main>
 </Layout>
 
 <style>
-  @media screen and (max-width: 483px) {
-    html {
-      overflow-y: scroll !important;
-    }
-  }
   html {
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll !important;
   }
   main {
     padding: 2rem;
@@ -70,6 +69,11 @@ const tiles = entires.items.map((item) => {
     grid-template-rows: auto;
     align-items: center;
     justify-content: center;
+  }
+  center p {
+    margin-top: 10vh;
+    font-size: 1.2rem;
+    opacity: 35%;
   }
   [class^='col-'] {
     display: flex;
