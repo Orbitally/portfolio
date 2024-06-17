@@ -15,19 +15,19 @@ import '../styles/staticNav.css';
 import { contentfulClient } from '../lib/contentful';
 import type { Project } from '../lib/contentful';
 
-const entires = await contentfulClient.getEntries<Project>({
-  content_type: 'project',
-  //@ts-ignore
-  order: '-fields.date',
-});
+let tiles = [];
 
-const tiles = entires.items.map((item) => {
-  const { title, subtitle, date, image, slug, columnNumber } = item.fields;
-  return { title, subtitle, date, image, slug, columnNumber };
-});
-
-//@ts-ignore
-tiles.map((tile) => console.log(tile.image.fields.file.url));
+try {
+  const data = await contentfulClient.getEntries<Project>({
+    content_type: 'project',
+    //@ts-ignore
+    order: '-fields.date',
+  });
+  tiles = data.items;
+  console.log(tiles);
+} catch (error) {
+  console.error(error);
+}
 ---
 
 <Layout>
@@ -40,15 +40,13 @@ tiles.map((tile) => console.log(tile.image.fields.file.url));
       {
         // map all the tiles that are in column one to the Tile component
         tiles.map((tile) => (
-          <>
-            {/* <Tile
-              title={tile.title}
-              subtitle={tile.subtitle}
-              date={tile.date}
-              image={`${tile.image.fields.file.url}`}
-              slug={tile.slug}
-            /> */}
-          </>
+          <Tile
+            title={tile.fields.title}
+            subtitle={tile.fields.subtitle}
+            date={tile.fields.date}
+            image={`${tile.fields.image.fields.file.url}`}
+            slug={tile.fields.slug}
+          />
         ))
       }
     </Grid>
