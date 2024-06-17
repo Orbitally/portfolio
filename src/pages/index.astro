@@ -26,7 +26,7 @@ const tiles = entires.items.map((item) => {
   return { title, subtitle, date, image, slug, columnNumber };
 });
 
-console.log(tiles[3].image.fields.file.url);
+console.log(tiles);
 ---
 
 <Layout>
@@ -39,13 +39,16 @@ console.log(tiles[3].image.fields.file.url);
       {
         // map all the tiles that are in column one to the Tile component
         tiles.map((tile) => (
-          <Tile
-            title={tile.title}
-            subtitle={tile.subtitle}
-            date={tile.date}
-            image={`${tile.image.fields.file.url}`}
-            slug={tile.slug}
-          />
+          <>
+            {/* <Tile
+              title={tile.title}
+              subtitle={tile.subtitle}
+              date={tile.date}
+              image={`${tile.image.fields.file.url}`}
+              slug={tile.slug}
+            /> */}
+            <p>{tile.image.fields.file.url}</p>
+          </>
         ))
       }
     </Grid>
