@@ -31,9 +31,7 @@ const tiles = entires.items.map((item) => {
 
 // console.log('Tiles:');
 // console.log(tiles);
-
-console.log('Tiles:');
-console.log(tiles[0].image);
+console.log(tiles[0].image.fields.file.url);
 ---
 
 <Layout>
@@ -43,18 +41,13 @@ console.log(tiles[0].image);
   <main>
     <Navbar />
     <Grid>
-      {
-        // map all the tiles that are in column one to the Tile component
-        tiles.map((tile) => (
-          <Tile
-            title={tile.title}
-            subtitle={tile.subtitle}
-            date={tile.date}
-            image={`${tile.image.fields.file.url}`}
-            slug={tile.slug}
-          />
-        ))
-      }
+      <Tile
+        title={tiles[0].image.fields.title}
+        subtitle={tiles[0].image.fields.subtitle}
+        date={tiles[0].image.fields.date}
+        image={`${tiles[0].image.fields.file.url}`}
+        slug={tiles[0].image.fields.file.slug}
+      />
     </Grid>
     <center>
       <p>More albums coming soon 👀</p>
