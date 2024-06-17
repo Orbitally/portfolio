@@ -26,7 +26,7 @@ const tiles = entires.items.map((item) => {
   return { title, subtitle, date, image, slug, columnNumber };
 });
 
-console.log(tiles);
+tiles.map((tile) => console.log(tile.image.fields.file.url));
 ---
 
 <Layout>
@@ -47,7 +47,6 @@ console.log(tiles);
               image={`${tile.image.fields.file.url}`}
               slug={tile.slug}
             /> */}
-            <p>{tile.image.fields.file.url}</p>
           </>
         ))
       }
