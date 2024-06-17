@@ -52,6 +52,17 @@ import { Image } from 'astro:assets';
     text-decoration: underline;
     transition-duration: 500ms;
   }
+  .navbar img {
+    filter: grayscale(100%);
+  }
+  .navbar img:hover {
+    filter: grayscale(0%);
+  }
+  @media (hover: none) {
+    .navbar img {
+      filter: none !important;
+    }
+  }
   .navbar .leftside {
     float: left;
     margin-left: 20px;
