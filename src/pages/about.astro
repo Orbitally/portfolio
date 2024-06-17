@@ -12,6 +12,7 @@ try {
   const data = await contentfulClient.getEntries<About>({
     content_type: 'about',
   });
+  console.log(data.items[0].fields);
   const { aboutParagraph, image } = data.items[0].fields;
   about = {
     aboutParagraph,
