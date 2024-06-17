@@ -9,7 +9,6 @@ export default defineConfig({
     '/projects': '/',
   },
   adapter: vercel({
-    functionPerRoute: true,
     webAnalytics: {
       enabled: true,
     },
