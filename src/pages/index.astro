@@ -25,6 +25,12 @@ const tiles = entires.items.map((item) => {
   const { title, subtitle, date, image, slug, columnNumber } = item.fields;
   return { title, subtitle, date, image, slug, columnNumber };
 });
+
+console.log('Raw Data:');
+console.log(entires.items);
+
+console.log('Tiles:');
+console.log(tiles);
 ---
 
 <Layout>
