@@ -16,7 +16,7 @@ export interface Project {
     };
     columnNumber: EntryFieldTypes.Integer;
     content: EntryFieldTypes.RichText;
-    gallery: EntryFieldTypes.AssetLink[];
+    gallery: EntryFieldTypes.AssetLink;
     slug: EntryFieldTypes.Text;
   };
 }

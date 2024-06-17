@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@astrojs/vercel": "^7.5.3",
-    "@contentful/rich-text-html-renderer": "^16.3.5",
+    "@contentful/rich-text-html-renderer": "^16.5.2",
     "@fontsource/inter": "^5.0.17",
     "@vercel/analytics": "^1.2.2",
     "astro": "^4.6.0",
-    "contentful": "^10.8.7"
+    "contentful": "^10.12.1"
   }
 }
