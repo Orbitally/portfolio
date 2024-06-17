@@ -26,7 +26,8 @@ const tiles = entires.items.map((item) => {
   return { title, subtitle, date, image, slug, columnNumber };
 });
 
-tiles.map((tile) => console.log(tile.image.fields));
+//@ts-ignore
+tiles.map((tile) => console.log(tile.image.fields.file.url));
 ---
 
 <Layout>
