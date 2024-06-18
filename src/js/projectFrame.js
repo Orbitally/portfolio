@@ -1,5 +1,9 @@
 // get the element with the id project-frame
 const frame = document.getElementById('frame');
+
+// get the element with the id frameBackground
+const frameBackground = document.getElementById('frameBackground');
+
 // Select all the elements with the class "tile" and add an event listener to each one
 const tiles = document.querySelectorAll('.tile');
 
@@ -9,9 +13,12 @@ function closeFrame() {
   // unlock background scrolling
   document.documentElement.style.overflow = 'auto';
   frame.classList.add('slide-out-bck-center');
+  frameBackground.classList.add('slide-out-bck-center');
   setTimeout(() => {
     frame.style.display = 'none';
+    frameBackground.style.display = 'none';
     frame.classList.remove('slide-out-bck-center');
+    frameBackground.classList.remove('slide-out-bck-center');
   }, 400);
 }
 
@@ -21,10 +28,15 @@ function closeFrameByBtn() {
   console.log(window.parent.document.documentElement);
   // unlock background scrolling
   window.parent.frame.classList.add('slide-out-bck-center');
+  window.parent.frameBackground.classList.add('slide-out-bck-center');
   setTimeout(() => {
     window.parent.frame.style.display = 'none';
+    window.parent.frameBackground.style.display = 'none';
     window.parent.document
       .getElementById('frame')
+      .classList.remove('slide-out-bck-center');
+    window.parent.document
+      .getElementById('frameBackground')
       .classList.remove('slide-out-bck-center');
   }, 400);
 }
@@ -33,6 +45,7 @@ function openFrame() {
   // lock background scrolling
   document.documentElement.style.overflow = 'hidden';
   frame.style.display = 'flex';
+  frameBackground.style.display = 'block';
   // add the slide-in-fwd-center class to the frame
   frame.classList.add('slide-in-fwd-center');
   setTimeout(() => {
