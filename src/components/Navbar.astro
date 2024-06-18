@@ -5,7 +5,7 @@ import { Image } from 'astro:assets';
 <div class="navbar">
   <div class="leftside">
     <Image src="/favicon.ico" alt="descriptive text" width="30" height="30" />
-    <a href="/">Jacob Kreindler</a>
+    <a id="funtext" href="/">Jacob Kreindler</a>
   </div>
   <div class="rightside">
     <a href="/projects">Projects</a>
@@ -18,8 +18,7 @@ import { Image } from 'astro:assets';
 <style>
   @media screen and (max-width: 615px) {
     .navbar {
-      display: flex;
-      flex-direction: column;
+      flex-direction: column !important;
       align-items: center;
     }
     .navbar .leftside {
@@ -32,6 +31,10 @@ import { Image } from 'astro:assets';
 
   .navbar {
     position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     top: 0;
     left: 0;
     width: 100vw;
@@ -47,16 +50,22 @@ import { Image } from 'astro:assets';
     color: black;
     padding: 0.5rem;
     transition-duration: 500ms;
+    font-size: 21px;
   }
   .navbar a:hover {
-    text-decoration: underline;
+    color: black;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke: 1px black;
+    font-size: 21px;
     transition-duration: 500ms;
   }
   .navbar img {
     filter: grayscale(100%);
+    transition-duration: 500ms;
   }
   .navbar img:hover {
     filter: grayscale(0%);
+    transition-duration: 500ms;
   }
   @media (hover: none) {
     .navbar img {
@@ -65,13 +74,23 @@ import { Image } from 'astro:assets';
   }
   .navbar .leftside {
     float: left;
-    margin-left: 20px;
+    margin-left: 75px;
     display: flex;
     flex-direction: row;
     align-items: center;
   }
   .navbar .rightside {
     float: right;
-    margin-right: 20px;
+    margin-right: 75px;
+  }
+  #funtext {
+    color: black;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke: 1px black;
+  }
+  #funtext:hover {
+    color: black;
+    -webkit-text-fill-color: black;
+    -webkit-text-stroke: 0px;
   }
 </style>
