@@ -4,6 +4,8 @@ const frame = document.getElementById('frame');
 const tiles = document.querySelectorAll('.tile');
 
 function closeFrame() {
+  // unlock background scrolling
+  document.documentElement.style.overflow = 'auto';
   frame.classList.add('slide-out-bck-center');
   setTimeout(() => {
     frame.style.display = 'none';
@@ -12,6 +14,8 @@ function closeFrame() {
 }
 
 function openFrame() {
+  // lock background scrolling
+  document.documentElement.style.overflow = 'hidden';
   frame.style.display = 'flex';
   // add the slide-in-fwd-center class to the frame
   frame.classList.add('slide-in-fwd-center');
