@@ -25,7 +25,7 @@ try {
 
 <Layout>
   <Navbar />
-  <div class="container">
+  <div class="about">
     <div>
       <h1>Hi! I'm <strong>Jacob</strong></h1>
       <p>
@@ -46,26 +46,20 @@ try {
   </div>
   <Footer />
   <style>
-    html {
-      overflow: hidden;
-    }
-    .container {
-      position: absolute;
-      left: 0;
-      top: 0;
+    .about {
       display: flex;
+      position: relative;
       width: 100vw;
-      height: 100vh;
       margin-top: 1.5vw;
+      margin-bottom: 30px;
       flex-direction: row;
       justify-content: center;
       align-items: center;
       z-index: 0;
     }
     @media screen and (max-width: 754px) {
-      .container {
+      .about {
         flex-direction: column;
-        margin-top: 10vw;
       }
       img {
         width: 100% !important;
@@ -94,6 +88,7 @@ try {
       padding: 20px;
       padding-bottom: 0;
       font-size: 45px;
+      margin-left: 50px;
     }
     h1 strong {
       color: black;
@@ -104,6 +99,8 @@ try {
       padding: 20px;
       padding-top: 0;
       font-size: 20px;
+      margin-left: 50px;
+      margin-right: 50px;
     }
   </style>
 </Layout>
