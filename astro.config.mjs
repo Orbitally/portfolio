@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
-
 import vercel from '@astrojs/vercel/serverless';
+
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,4 +18,12 @@ export default defineConfig({
   images: {
     domains: ['images.ctfassets.net', 'cdn.contentful.com'],
   },
+  integrations: [
+    icon({
+      include: {
+        mdi: ['github'],
+        carbon: ['email'],
+      },
+    }),
+  ],
 });

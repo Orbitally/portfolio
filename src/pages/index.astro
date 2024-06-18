@@ -6,6 +6,7 @@ import Grid from '../layouts/Grid.astro';
 import Tile from '../components/Tile.astro';
 import Navbar from '../components/Navbar.astro';
 import ProjectFrame from '../components/ProjectFrame.astro';
+import Footer from '../components/Footer.astro';
 
 import '../styles/animations.css';
 import '../styles/staticNav.css';
@@ -49,6 +50,7 @@ const tiles = entires.items.map((item) => {
     <center>
       <p>More albums coming soon 👀</p>
     </center>
+    <Footer />
     <ProjectFrame />
     <script src="../js/mobileHover.js"></script>
   </main>
@@ -73,6 +75,7 @@ const tiles = entires.items.map((item) => {
     margin-top: 10vh;
     font-size: 1.2rem;
     opacity: 35%;
+    margin-bottom: 15vh;
   }
   [class^='col-'] {
     display: flex;
