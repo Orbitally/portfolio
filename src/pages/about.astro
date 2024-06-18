@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Navbar from '../components/Navbar.astro';
 import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
 
 import { contentfulClient } from '../lib/contentful';
 import type { About } from '../lib/contentful';
@@ -43,7 +44,7 @@ try {
       src=`${about?.image}?fm=webp&w=1920&h=1080&q=65`
     />
   </div>
-
+  <Footer />
   <style>
     html {
       overflow: hidden;
