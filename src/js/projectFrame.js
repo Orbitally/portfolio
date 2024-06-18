@@ -17,13 +17,12 @@ function closeFrame() {
 
 // Close frame method just taking into account that it needs to address the parent window to style the frame to make it hide
 function closeFrameByBtn() {
+  window.parent.document.documentElement.style.overflow = 'auto';
+  console.log(window.parent.document.documentElement);
   // unlock background scrolling
-  document.documentElement.style.overflow = 'auto';
-  window.parent.document
-    .getElementById('frame')
-    .classList.add('slide-out-bck-center');
+  window.parent.frame.classList.add('slide-out-bck-center');
   setTimeout(() => {
-    window.parent.document.getElementById('frame').style.display = 'none';
+    window.parent.frame.style.display = 'none';
     window.parent.document
       .getElementById('frame')
       .classList.remove('slide-out-bck-center');
