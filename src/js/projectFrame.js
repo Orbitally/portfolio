@@ -15,6 +15,7 @@ function closeFrame() {
   }, 400);
 }
 
+// Close frame method just taking into account that it needs to address the parent window to style the frame to make it hide
 function closeFrameByBtn() {
   // unlock background scrolling
   document.documentElement.style.overflow = 'auto';
@@ -54,4 +55,12 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
+// If the user clicks outside the frame, close the frame
+window.addEventListener('click', (event) => {
+  if (event.target === frame) {
+    closeFrame();
+  }
+});
+
+// If the user clicks the close button, close the frame
 closeBtn.addEventListener('click', closeFrameByBtn);
