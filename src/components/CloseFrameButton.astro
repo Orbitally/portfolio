@@ -6,6 +6,23 @@ import { Icon } from 'astro-icon/components';
   ><Icon name="solar:close-circle-bold" /></button
 >
 
+<script>
+  // Detect if the user starts scrolling down
+  let lastScrollTop = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll =
+      window.pageYOffset || document.documentElement.scrollTop;
+    // If they start scrolling down then hide the close button above the frame
+    if (currentScroll > lastScrollTop) {
+      document.getElementById('closeFrame').style.top = '-40px';
+      // Otherwise, move the button down and show it
+    } else {
+      document.getElementById('closeFrame').style.top = '20px';
+    }
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  });
+</script>
+
 <style>
   .closeBtn {
     position: fixed;
