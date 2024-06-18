@@ -9,7 +9,6 @@ if (isMobile) {
     tiles.forEach((tile) => {
       const rect = tile.getBoundingClientRect();
       const y = rect.top;
-      console.log(y);
       if (y < window.innerHeight / 2 && y > -window.innerHeight / 2) {
         tile.style.filter = 'none';
       } else {
