@@ -1,5 +1,7 @@
 ---
-import { Image, imageConfig } from 'astro:assets';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
 import Layout from '../../layouts/Layout.astro';
 import { contentfulClient } from '../../lib/contentful';
 import type { Project } from '../../lib/contentful';
@@ -45,6 +47,9 @@ try {
 ---
 
 <Layout>
+  <button class="closeBtn" id="closeFrame"
+    ><Icon name="solar:close-circle-bold" /></button
+  >
   <div class="headerText">
     <h1>{project?.title}</h1>
     <!-- if the date is returned as "invalid date don't show it" -->
@@ -160,5 +165,32 @@ try {
     color: white;
     bottom: 0;
     margin: 10px;
+  }
+  .closeBtn {
+    position: fixed;
+    top: 20px;
+    left: -5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+    width: 100vw;
+    z-index: 1;
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  [data-icon] {
+    color: rgb(169, 169, 169);
+    font-size: 42px;
+    opacity: 0.5;
+    transition-duration: 200ms;
+  }
+  [data-icon]:hover {
+    opacity: 1;
+    transition-duration: 200ms;
   }
 </style>
