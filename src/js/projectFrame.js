@@ -25,7 +25,6 @@ function closeFrame() {
 // Close frame method just taking into account that it needs to address the parent window to style the frame to make it hide
 function closeFrameByBtn() {
   window.parent.document.documentElement.style.overflow = 'auto';
-  console.log(window.parent.document.documentElement);
   // unlock background scrolling
   window.parent.frame.classList.add('slide-out-bck-center');
   window.parent.frameBackground.classList.add('slide-out-bck-center');
@@ -74,5 +73,5 @@ window.addEventListener('click', (event) => {
   }
 });
 
-// If the user clicks the close button, close the frame
-closeBtn.addEventListener('click', closeFrameByBtn);
+// If the user clicks the close button and the element exists (isn't null thus the '?'), close the frame
+closeBtn?.addEventListener('click', closeFrameByBtn);
