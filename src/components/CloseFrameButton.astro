@@ -6,7 +6,7 @@ import { Icon } from 'astro-icon/components';
   ><Icon name="solar:close-circle-bold" /></button
 >
 
-<!-- <script>
+<script>
   // Detect if the user starts scrolling down
   let lastScrollTop = 0;
   window.addEventListener('scroll', () => {
@@ -14,20 +14,20 @@ import { Icon } from 'astro-icon/components';
       window.pageYOffset || document.documentElement.scrollTop;
     // If they start scrolling down then hide the close button above the frame
     if (currentScroll > lastScrollTop) {
-      document.getElementById('closeFrame').style.top = '-40px';
+      document.getElementById('closeFrame').style.top = '3px';
       // Otherwise, move the button down and show it
     } else {
-      document.getElementById('closeFrame').style.top = '20px';
+      document.getElementById('closeFrame').style.top = '19px';
     }
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   });
-</script> -->
+</script>
 
 <style>
   .closeBtn {
     position: fixed;
-    bottom: 0px;
-    left: -6px;
+    top: 3px;
+    /* left: -6px; */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -40,6 +40,16 @@ import { Icon } from 'astro-icon/components';
     border: none;
     cursor: pointer;
     transition-duration: 300ms;
+  }
+  .closeBtn:hover {
+    top: 19px !important;
+    transition-duration: 300ms;
+  }
+  @media screen and (max-width: 768px) {
+    [data-icon] {
+      color: rgb(209, 139, 139) !important;
+      opacity: 0.8 !important;
+    }
   }
   [data-icon] {
     color: rgb(0, 0, 0);
