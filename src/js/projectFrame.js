@@ -9,21 +9,8 @@ const tiles = document.querySelectorAll('.tile');
 
 const closeBtn = document.getElementById('closeFrame');
 
-function closeFrame() {
-  // unlock background scrolling
-  document.documentElement.style.overflow = 'auto';
-  frame.classList.add('slide-out-bck-center');
-  frameBackground.classList.add('slide-out-bck-center');
-  setTimeout(() => {
-    frame.style.display = 'none';
-    frameBackground.style.display = 'none';
-    frame.classList.remove('slide-out-bck-center');
-    frameBackground.classList.remove('slide-out-bck-center');
-  }, 400);
-}
-
 // Close frame method just taking into account that it needs to address the parent window to style the frame to make it hide
-function closeFrameByBtn() {
+function closeFrame() {
   window.parent.document.documentElement.style.overflow = 'auto';
   // unlock background scrolling
   window.parent.frame.classList.add('slide-out-bck-center');
@@ -74,4 +61,4 @@ window.addEventListener('click', (event) => {
 });
 
 // If the user clicks the close button and the element exists (isn't null thus the '?'), close the frame
-closeBtn?.addEventListener('click', closeFrameByBtn);
+closeBtn?.addEventListener('click', closeFrame);
