@@ -6,7 +6,7 @@ import { Icon } from 'astro-icon/components';
   ><Icon name="solar:close-circle-bold" /></button
 >
 
-<script>
+<!-- <script>
   // Detect if the user starts scrolling down
   let lastScrollTop = 0;
   window.addEventListener('scroll', () => {
@@ -21,13 +21,13 @@ import { Icon } from 'astro-icon/components';
     }
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   });
-</script>
+</script> -->
 
 <style>
   .closeBtn {
     position: fixed;
-    top: 20px;
-    left: -5px;
+    bottom: 0px;
+    left: -6px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -38,18 +38,18 @@ import { Icon } from 'astro-icon/components';
     background-color: transparent;
     color: white;
     border: none;
-    font-size: 1.5rem;
     cursor: pointer;
     transition-duration: 300ms;
   }
   [data-icon] {
-    color: rgb(169, 169, 169);
-    font-size: 42px;
-    opacity: 0.6;
+    color: rgb(0, 0, 0);
+    font-size: 55px;
+    opacity: 0.55;
     transition-duration: 200ms;
   }
   [data-icon]:hover {
-    opacity: 1;
+    color: rgb(209, 139, 139);
+    opacity: 0.9;
     transition-duration: 200ms;
   }
 </style>
