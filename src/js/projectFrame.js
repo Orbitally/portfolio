@@ -75,6 +75,6 @@ window.addEventListener('click', (event) => {
 });
 
 // If the user clicks the close button, close the frame
-// frame.closeBtn.addEventListener('click', closeFrameByBtn);
+frame.closeBtn.addEventListener('click', closeFrameByBtn);
 
 console.log(frame);
