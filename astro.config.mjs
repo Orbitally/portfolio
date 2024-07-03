@@ -24,7 +24,7 @@ export default defineConfig({
   integrations: [
     icon({
       include: {
-        mdi: ['github'],
+        mdi: ['github', 'instagram'],
         carbon: ['email', 'close-outline'],
         solar: ['close-circle-bold'],
       },
