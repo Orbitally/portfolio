@@ -16,7 +16,7 @@
     "@fontsource/inter": "^5.0.17",
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.12",
-    "astro": "^4.6.0",
+    "astro": "^4.11.4",
     "astro-icon": "^1.1.0",
     "astro-robots-txt": "^1.0.0",
     "contentful": "^10.8.7"
