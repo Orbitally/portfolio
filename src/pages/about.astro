@@ -1,5 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
 import Navbar from '../components/Navbar.astro';
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
@@ -34,6 +36,17 @@ try {
           about?.aboutParagraph
         }
       </p>
+      <div class="icons">
+        <a href="https://instagram.com/cameracob">
+          <Icon name="mdi:instagram" />
+        </a>
+        <a href="https://github.com/Orbitally">
+          <Icon name="mdi:github" />
+        </a>
+        <a href="mailto:hello@kreindler.ca">
+          <Icon name="carbon:email" />
+        </a>
+      </div>
     </div>
     <Image
       alt=""
@@ -56,6 +69,24 @@ try {
       justify-content: center;
       align-items: center;
       z-index: 0;
+    }
+    .icons {
+      text-align: center;
+    }
+    .icons a {
+      text-decoration: none;
+      color: black;
+      text-decoration: none;
+      margin: 5px;
+    }
+    [data-icon] {
+      color: black;
+      transition-duration: 200ms;
+      font-size: 30px;
+    }
+    [data-icon]:hover {
+      color: #5c7081;
+      transition-duration: 200ms;
     }
     @media screen and (max-width: 754px) {
       .about {
