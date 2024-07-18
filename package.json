@@ -19,7 +19,7 @@
     "astro": "^4.6.0",
     "astro-icon": "^1.1.0",
     "astro-robots-txt": "^1.0.0",
-    "contentful": "^10.8.7"
+    "contentful": "^10.12.12"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.35",
