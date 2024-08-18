@@ -1,13 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 
-const { title, subtitle, date, image, slug } = Astro.props;
+const { title, date, image, slug } = Astro.props;
 ---
 
 <a class="tile" href=`/projects/${slug}` target="the-frame" data-astro-reload>
   <div class="text">
     <p class="title">{title}</p>
-    <p class="subtitle">{subtitle}</p>
     <p class="date">{date}</p>
   </div>
   <Image

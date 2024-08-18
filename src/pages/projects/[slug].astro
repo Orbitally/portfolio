@@ -33,14 +33,17 @@ try {
     content_type: 'project',
     'fields.slug': slug,
   });
-  const { title, date, image, content, gallery } = data.items[0].fields;
+  const { title, subtitle, date, image, content, gallery } =
+    data.items[0].fields;
   project = {
     title,
+    subtitle,
     date: new Date(date).toLocaleDateString(),
     image: image.fields.file.url,
     content: documentToHtmlString(content, options),
-    gallery: data.items[0].fields.gallery,
+    gallery,
   };
+  console.log(project);
 } catch (error) {
   console.error(error);
 }
@@ -50,8 +53,9 @@ try {
   <CloseButton />
   <div class="headerText">
     <h1>{project?.title}</h1>
+    <h2>{project?.subtitle}</h2>
     <!-- if the date is returned as "invalid date don't show it" -->
-    <h2>{project?.date !== 'Invalid Date' && project?.date}</h2>
+    <h3>{project?.date !== 'Invalid Date' && project?.date}</h3>
   </div>
   <!-- Render the top header image -->
   <Image
@@ -130,6 +134,7 @@ try {
     position: absolute;
     top: 0;
     left: 0;
+    filter: brightness(0.9);
   }
 
   .gallery-image {
@@ -150,7 +155,17 @@ try {
     margin: 5px;
     padding: 10px;
   }
-
+  h1 {
+    margin-bottom: 5px;
+    font-weight: bolder;
+  }
+  h2 {
+    margin: 0;
+    font-weight: 400;
+  }
+  h3 {
+    font-weight: bold;
+  }
   p {
     text-align: justify;
   }
