@@ -21,16 +21,6 @@ import { Image } from 'astro:assets';
       flex-direction: column !important;
       align-items: center;
       padding-top: 3vh !important;
-
-      /* Blur effect */
-      padding-bottom: 50px !important;
-      backdrop-filter: blur(5px);
-      -webkit-mask-image: linear-gradient(
-        to bottom,
-        black 70%,
-        transparent 100%
-      );
-      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     }
     .navbar .leftside {
       margin-left: 0px !important;
@@ -42,6 +32,8 @@ import { Image } from 'astro:assets';
 
   .navbar {
     display: flex;
+    position: fixed;
+    top: 0;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -51,6 +43,12 @@ import { Image } from 'astro:assets';
     line-height: normal;
     padding-top: 5vh;
     padding-bottom: 0.5vh;
+
+    /* Blur effect */
+    padding-bottom: 50px !important;
+    backdrop-filter: blur(5px);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   }
   .navbar a {
     text-decoration: none;
