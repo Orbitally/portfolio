@@ -1,6 +1,6 @@
 ---
 import SpeedInsights from '@vercel/speed-insights/astro';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 
 import '@fontsource/inter';
 import '../styles/blurry-load.css';
@@ -136,11 +136,14 @@ import '../styles/blurry-load.css';
     <script>
       import { BlurryImageLoad } from '../js/blurry-load.js';
       const blurryImageLoad = new BlurryImageLoad();
-      blurryImageLoad.load();
+      document.addEventListener('astro:page-load', () => {
+        blurryImageLoad.load();
+      });
     </script>
     <SpeedInsights />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
+
   <body>
     <slot />
     <script src="../js/projectFrame.js"></script>
@@ -185,6 +188,17 @@ import '../styles/blurry-load.css';
       @supports not selector(::-webkit-scrollbar) {
         body {
           scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+        }
+      }
+    </style>
+    <!-- Custom Slide Animation -->
+    <style is:global>
+      @keyframes slide-left {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100%);
         }
       }
     </style>

@@ -2,11 +2,13 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 
-import Navbar from '../components/Navbar.astro';
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
 import { contentfulClient } from '../lib/contentful';
+
+import { slide } from 'astro:transitions';
 
 import type { About } from '../lib/contentful';
 
@@ -28,36 +30,38 @@ try {
 
 <Layout>
   <Navbar />
-  <div class="about">
-    <div>
-      <h1>Hi! I'm <strong>Jacob</strong></h1>
-      <!-- Render the about paragraph replacing all the \n's with <br />'s -->
-      <p set:html={about?.aboutParagraph.replace(/\n/g, '<br/>')} />
-      <!-- <div class="icons">
-        <a href="https://instagram.com/cameracob">
+  <main transition:animate={slide({ duration: -0.5 })}>
+    <div class="about">
+      <div>
+        <h1>Hi! I'm <strong>Jacob</strong></h1>
+        <!-- Render the about paragraph replacing all the \n's with <br />'s -->
+        <p set:html={about?.aboutParagraph.replace(/\n/g, '<br/>')} />
+        <!-- <div class="icons">
+          <a href="https://instagram.com/cameracob">
           <Icon name="mdi:instagram" />
-        </a>
-        <a href="https://github.com/Orbitally">
+          </a>
+          <a href="https://github.com/Orbitally">
           <Icon name="mdi:github" />
-        </a>
-        <a href="https://linkedin.com/in/jacobkreindler">
+          </a>
+          <a href="https://linkedin.com/in/jacobkreindler">
           <Icon name="mdi:linkedin" />
-        </a>
-        <a href="mailto:hello@kreindler.ca">
-          <Icon name="carbon:email" />
-        </a>
-      </div> -->
+          </a>
+          <a href="mailto:hello@kreindler.ca">
+            <Icon name="carbon:email" />
+            </a>
+            </div> -->
+      </div>
+      <!-- <Image
+          alt=""
+          width={1920}
+          height={1080}
+          aspect-ratio="16/9"
+          loading="eager"
+          src=`${about?.image}?fm=webp&w=1920&h=1080&q=65`
+          /> -->
     </div>
-    <!-- <Image
-      alt=""
-      width={1920}
-      height={1080}
-      aspect-ratio="16/9"
-      loading="eager"
-      src=`${about?.image}?fm=webp&w=1920&h=1080&q=65`
-    /> -->
-  </div>
-  <Footer />
+    <Footer />
+  </main>
   <style>
     .about {
       display: flex;
