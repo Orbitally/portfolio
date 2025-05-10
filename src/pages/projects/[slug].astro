@@ -2,12 +2,13 @@
 import { Image } from 'astro:assets';
 
 import Layout from '../../layouts/Layout.astro';
+import Grid from '../../layouts/Grid.astro';
+import Navbar from '../../components/Navbar.astro';
+
 import { contentfulClient } from '../../lib/contentful';
 import type { Project } from '../../lib/contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS } from '@contentful/rich-text-types';
-import Grid from '../../layouts/Grid.astro';
-import CloseButton from '../../components/CloseFrameButton.astro';
 
 let project;
 const { slug } = Astro.params;
@@ -49,7 +50,7 @@ try {
 ---
 
 <Layout>
-  <CloseButton />
+  <Navbar />
   <div class="headerText">
     <h1>{project?.title}</h1>
     <h2>{project?.subtitle}</h2>
