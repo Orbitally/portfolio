@@ -66,6 +66,7 @@ try {
     loading="eager"
     data-large=`${project?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
     src=`${project?.image}?fm=webp&w=1920&h=1080&q=5&fit=fill`
+    transition:name={`project-${slug}`}
   />
   <center>
     {

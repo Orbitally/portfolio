@@ -144,9 +144,9 @@ import '../styles/blurry-load.css';
     <ClientRouter />
   </head>
 
-  <body>
+  <body transition:name="root" transition:animate="none">
     <slot />
-    <script src="../js/projectFrame.js"></script>
+    <!-- <script src="../js/projectFrame.js"></script> -->
 
     <script is:inline src="https://unpkg.com/aos/dist/aos.js"></script>
     <script is:inline>
