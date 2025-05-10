@@ -136,6 +136,8 @@ import '../styles/blurry-load.css';
     <script>
       import { BlurryImageLoad } from '../js/blurry-load.js';
       const blurryImageLoad = new BlurryImageLoad();
+      blurryImageLoad.load();
+
       document.addEventListener('astro:page-load', () => {
         blurryImageLoad.load();
       });
@@ -144,7 +146,7 @@ import '../styles/blurry-load.css';
     <ClientRouter />
   </head>
 
-  <body transition:name="root" transition:animate="none">
+  <body>
     <slot />
     <!-- <script src="../js/projectFrame.js"></script> -->
 
@@ -156,7 +158,16 @@ import '../styles/blurry-load.css';
         once: true,
         offset: 50,
       });
+      document.addEventListener('astro:page-load', () => {
+        AOS.init({
+          duration: 400,
+          delay: 50,
+          once: true,
+          offset: 50,
+        });
+      });
     </script>
+
     <style is:global>
       html {
         font-family: 'Inter', sans-serif;
