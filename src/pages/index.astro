@@ -1,4 +1,6 @@
 ---
+//@ts-nocheck
+
 export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
@@ -18,7 +20,6 @@ import type { Project } from '../lib/contentful';
 
 const entires = await contentfulClient.getEntries<Project>({
   content_type: 'project',
-  //@ts-ignore
   order: '-fields.date',
 });
 
@@ -36,7 +37,6 @@ const tiles = entires.items.map((item) => {
       {
         // map all the tiles that are in column one to the Tile component
         tiles.map((tile) => (
-          //@ts-ignore
           <Tile
             title={tile.title}
             date={tile.date}

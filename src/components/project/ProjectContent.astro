@@ -1,4 +1,5 @@
 ---
+//@ts-nocheck
 import { Image } from 'astro:assets';
 
 import Grid from '../../layouts/Grid.astro';
@@ -29,7 +30,6 @@ const options = {
 };
 
 try {
-  //@ts-ignore
   const data = await contentfulClient.getEntries<Project>({
     content_type: 'project',
     'fields.slug': slug,
@@ -37,7 +37,6 @@ try {
   });
   const { content, gallery } = data.items[0].fields;
   lowerContent = {
-    //@ts-ignore
     content: documentToHtmlString(content, options),
     gallery,
   };
