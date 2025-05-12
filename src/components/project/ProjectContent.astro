@@ -1,0 +1,139 @@
+---
+import { Image } from 'astro:assets';
+
+import Grid from '../../layouts/Grid.astro';
+
+import { contentfulClient } from '../../lib/contentful';
+import type { Project } from '../../lib/contentful';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import { BLOCKS } from '@contentful/rich-text-types';
+
+let lowerContent;
+
+const { slug } = Astro.params;
+
+const options = {
+  preserveWhitespace: true,
+  renderNode: {
+    // Render the embedded images with all the custom styling options
+    [BLOCKS.EMBEDDED_ASSET]: ({
+      data: {
+        target: { fields },
+      },
+    }) =>
+      `<img data-aos="fade-up" class="blurry-load" style="margin: 10px 10px 10px 0px; border-radius: 3px;" src="https://${fields.file.url}?fm=webp&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=webp&w=1920&h=1080&q=35&fit=pad width="40%" height="auto" alt="${fields.description}"/>`,
+    // Render the text of the paragraph in a justified way
+    [BLOCKS.PARAGRAPH]: (node, next) =>
+      `<p style="text-align: justify";>${next(node.content)}</p>`,
+  },
+};
+
+try {
+  //@ts-ignore
+  const data = await contentfulClient.getEntries<Project>({
+    content_type: 'project',
+    'fields.slug': slug,
+    select: 'sys.id,fields.content,fields.gallery',
+  });
+  const { content, gallery } = data.items[0].fields;
+  lowerContent = {
+    //@ts-ignore
+    content: documentToHtmlString(content, options),
+    gallery,
+  };
+} catch (error) {
+  console.error(error);
+}
+---
+
+<center>
+  {
+    // If the gallery exists
+    lowerContent?.gallery ? (
+      // Then map the images in the gallery
+      <article>
+        <Grid>
+          {/* Map the landscape orientation images */}
+          {lowerContent?.gallery
+            .filter(
+              (image) =>
+                image.fields.file.details.image.width >
+                image.fields.file.details.image.height
+            )
+            .map((image) => (
+              <Image
+                data-aos="fade-up"
+                class="blurry-load gallery-image"
+                alt=""
+                width={960}
+                height={540}
+                loading="lazy"
+                data-large={`${image.fields.file.url}?fm=webp&w=960&h=540&q=55&fit=fill`}
+                src={`${image.fields.file.url}?fm=webp&w=240&h=135&q=2&fit=fill`}
+                aspect-ratio="3/2"
+              />
+            ))}
+          {/* Map the portrait orientation images */}
+
+          {lowerContent?.gallery
+            .filter(
+              (image) =>
+                image.fields.file.details.image.width <
+                image.fields.file.details.image.height
+            )
+            .map((image) => (
+              <Image
+                data-aos="fade-up"
+                class="blurry-load gallery-image"
+                alt=""
+                width={540}
+                height={960}
+                loading="lazy"
+                data-large={`${image.fields.file.url}?fm=webp&w=540&h=960&q=55&fit=fill`}
+                src={`${image.fields.file.url}?fm=webp&w=135&h=240&q=2&fit=fill`}
+                aspect-ratio="2/3"
+              />
+            ))}
+        </Grid>
+      </article>
+    ) : (
+      // If it doesn't exist, then show the article content
+      <article set:html={lowerContent?.content ? lowerContent?.content : ''} />
+    )
+  }
+</center>
+
+<style>
+  .gallery-image {
+    width: 100%;
+    height: auto;
+    margin: 5px;
+    border-radius: 3px;
+  }
+  center {
+    display: flex;
+    justify-content: center;
+  }
+  article {
+    display: block;
+    position: absolute;
+    top: 100vh;
+    align-items: center;
+    margin: 5px;
+    padding: 10px;
+  }
+
+  p {
+    text-align: justify;
+  }
+
+  .headerText {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    z-index: 1;
+    color: white;
+    bottom: 0;
+    margin: 35px;
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+
+import { contentfulClient } from '../../lib/contentful';
+import type { Project } from '../../lib/contentful';
+
+let upperContent;
+
+const { slug } = Astro.params;
+
+// Get just the title, subtitle, date, and image of the project to be loaded first
+try {
+  //@ts-ignore
+  const topSection = await contentfulClient.getEntries<Project>({
+    content_type: 'project',
+    'fields.slug': slug,
+    select: 'sys.id,fields.title,fields.subtitle,fields.date,fields.image',
+  });
+
+  const { title, subtitle, date, image } = topSection.items[0].fields;
+
+  upperContent = {
+    title,
+    subtitle,
+    date: new Date(date).toLocaleDateString(),
+    //@ts-ignore
+    image: image.fields.file.url,
+  };
+} catch (error) {
+  console.error(error);
+}
+---
+
+<div class="headerText">
+  <h1>{upperContent?.title}</h1>
+  <h2>{upperContent?.subtitle}</h2>
+  <!-- if the date is returned as "invalid date don't show it" -->
+  <h3>{upperContent?.date !== 'Invalid Date' && upperContent?.date}</h3>
+</div>
+<!-- Render the top header image -->
+<Image
+  class="blurry-load top-image"
+  alt=""
+  width={100}
+  height={100}
+  loading="eager"
+  data-large=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
+  src=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=5&fit=fill`
+  transition:name={`project-${slug}`}
+/>
+
+<style>
+  .top-image {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: brightness(0.9);
+  }
+
+  h1 {
+    margin-bottom: 5px;
+    font-weight: bolder;
+  }
+  h2 {
+    margin: 0;
+    font-weight: 400;
+  }
+  h3 {
+    font-weight: bold;
+  }
+
+  .headerText {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    z-index: 1;
+    color: white;
+    bottom: 0;
+    margin: 35px;
+  }
+</style>
