@@ -1,3 +1,5 @@
+/* ALSO YOINKED FROM https://github.com/dombrant/blurry-image-load */
+
 .blurry-load {
   filter: blur(8px);
 }
