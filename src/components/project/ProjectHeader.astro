@@ -1,4 +1,5 @@
 ---
+//@ts-nocheck
 import { Image } from 'astro:assets';
 
 import { contentfulClient } from '../../lib/contentful';
@@ -10,7 +11,6 @@ const { slug } = Astro.params;
 
 // Get just the title, subtitle, date, and image of the project to be loaded first
 try {
-  //@ts-ignore
   const topSection = await contentfulClient.getEntries<Project>({
     content_type: 'project',
     'fields.slug': slug,
@@ -23,7 +23,6 @@ try {
     title,
     subtitle,
     date: new Date(date).toLocaleDateString(),
-    //@ts-ignore
     image: image.fields.file.url,
   };
 } catch (error) {
@@ -39,13 +38,12 @@ try {
 </div>
 <!-- Render the top header image -->
 <Image
-  class="blurry-load top-image"
+  class="top-image"
   alt=""
   width={100}
   height={100}
   loading="eager"
-  data-large=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
-  src=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=5&fit=fill`
+  src=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
   transition:name={`project-${slug}`}
 />
 
