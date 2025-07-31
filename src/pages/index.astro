@@ -24,19 +24,17 @@ const tiles = entires.items.map((item) => {
 ---
 
 <Layout>
-  <Grid>
-    {
-      // map all the tiles that are in column one to the Tile component
-      tiles.map((tile) => (
-        <Tile
-          title={tile.title}
-          date={tile.date}
-          image={`${tile.image.fields.file.url}`}
-          slug={tile.slug}
-        />
-      ))
-    }
-  </Grid>
+  {
+    // map all the tiles that are in column one to the Tile component
+    tiles.map((tile) => (
+      <Tile
+        title={tile.title}
+        date={tile.date}
+        image={`${tile.image.fields.file.url}`}
+        slug={tile.slug}
+      />
+    ))
+  }
   <center>
     <p>More albums coming soon 👀</p>
   </center>
