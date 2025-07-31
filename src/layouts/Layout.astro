@@ -4,7 +4,9 @@ import { ClientRouter } from 'astro:transitions';
 
 import Navbar from '../components/Navbar.astro';
 
-import '@fontsource/inter';
+// Supports weights 400-800
+import '@fontsource-variable/baloo-2';
+
 import '../styles/blurry-load.css';
 ---
 
@@ -162,7 +164,9 @@ import '../styles/blurry-load.css';
         --darkgrey: #505050;
       }
       html {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Baloo 2 Variable', sans-serif;
+        font-weight: 400;
+        font-size: 18px;
         overflow: hidden;
       }
 
