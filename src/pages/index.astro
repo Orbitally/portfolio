@@ -4,13 +4,10 @@
 import Layout from '../layouts/Layout.astro';
 import Grid from '../layouts/Grid.astro';
 import Tile from '../components/Tile.astro';
-import Navbar from '../components/Navbar.astro';
 import ProjectFrame from '../components/project/ProjectFrame.astro';
 import Footer from '../components/Footer.astro';
 
 import '../styles/animations.css';
-
-// import '../js/reuseTile.js';
 
 import { contentfulClient } from '../lib/contentful';
 import type { Project } from '../lib/contentful';
@@ -27,89 +24,22 @@ const tiles = entires.items.map((item) => {
 ---
 
 <Layout>
-  <!-- <script src="../js/reuseTile.js"></script> -->
-  <Navbar />
-  <main transition:animate="slide">
-    <Grid>
-      {
-        // map all the tiles that are in column one to the Tile component
-        tiles.map((tile) => (
-          <Tile
-            title={tile.title}
-            date={tile.date}
-            image={`${tile.image.fields.file.url}`}
-            slug={tile.slug}
-            transition:name={`project-${tile.slug}`}
-          />
-        ))
-      }
-    </Grid>
-    <center>
-      <p>More albums coming soon 👀</p>
-    </center>
-    <Footer />
-    <ProjectFrame />
-    <script src="../js/mobileHover.js"></script>
-  </main>
+  <Grid>
+    {
+      // map all the tiles that are in column one to the Tile component
+      tiles.map((tile) => (
+        <Tile
+          title={tile.title}
+          date={tile.date}
+          image={`${tile.image.fields.file.url}`}
+          slug={tile.slug}
+          transition:name={`project-${tile.slug}`}
+        />
+      ))
+    }
+  </Grid>
+  <center>
+    <p>More albums coming soon 👀</p>
+  </center>
 </Layout>
-
-<style>
-  main {
-    padding: 2rem;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 0;
-    font-size: 20px;
-    line-height: 1.6;
-    display: grid;
-    grid-template-rows: auto;
-    align-items: center;
-    justify-content: center;
-  }
-  center p {
-    margin-top: 10vh;
-    font-size: 1.2rem;
-    opacity: 35%;
-    margin-bottom: 55px;
-  }
-  [class^='col-'] {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    animation-name: slideUp;
-    animation-iteration-count: infinite;
-    animation-direction: normal;
-    animation-timing-function: linear;
-  }
-
-  [class^='col-']:hover {
-    animation-play-state: paused;
-  }
-
-  .col-1 {
-    animation-duration: 205s;
-    margin-top: 10px;
-  }
-  @media screen and (max-width: 815px) {
-    .col-1 {
-      margin-top: 0px;
-    }
-  }
-  @media screen and (max-width: 483px) {
-    .col-4 {
-      margin-top: 0px !important;
-    }
-  }
-  .col-2 {
-    animation-duration: 170s;
-    margin-top: -2px;
-  }
-  .col-3 {
-    animation-duration: 200s;
-    margin-top: -35px;
-  }
-  .col-4 {
-    animation-duration: 180s;
-    margin-top: -64px;
-  }
-</style>
+<script src="../js/mobileHover.js"></script>

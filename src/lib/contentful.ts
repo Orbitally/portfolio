@@ -1,6 +1,15 @@
 import * as contentful from 'contentful';
 import type { EntryFieldTypes } from 'contentful';
 
+export interface ProjectNames {
+  contentTypeId: 'project';
+  fields: {
+    title: EntryFieldTypes.Text;
+    slug: EntryFieldTypes.Text;
+    type: EntryFieldTypes.Text;
+  };
+}
+
 export interface Project {
   contentTypeId: 'project';
   fields: {

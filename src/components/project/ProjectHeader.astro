@@ -31,32 +31,48 @@ try {
 }
 ---
 
-<div class="headerText">
-  <h1>{upperContent?.title}</h1>
-  <h2>{upperContent?.subtitle}</h2>
-  <!-- if the date is returned as "invalid date don't show it" -->
-  <h3>{upperContent?.date !== 'Invalid Date' && upperContent?.date}</h3>
+<div class="header">
+  <!-- Render the top header image -->
+  <Image
+    class="top-image"
+    alt=""
+    width={100}
+    height={100}
+    loading="eager"
+    src=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
+    transition:name={`project-${slug}`}
+  />
+  <div class="headerText">
+    <h1>{upperContent?.title}</h1>
+    <h2>{upperContent?.subtitle}</h2>
+    <!-- if the date is returned as "invalid date don't show it" -->
+    <h3>{upperContent?.date !== 'Invalid Date' && upperContent?.date}</h3>
+  </div>
 </div>
-<!-- Render the top header image -->
-<Image
-  class="top-image"
-  alt=""
-  width={100}
-  height={100}
-  loading="eager"
-  src=`${upperContent?.image}?fm=webp&w=1920&h=1080&q=65&fit=fill`
-  transition:name={`project-${slug}`}
-/>
 
 <style>
+  .header {
+    margin: 0;
+    height: 100vh;
+    position: relative; /* Add this to create a positioning context */
+  }
+
+  .header .headerText {
+    display: flex;
+    vertical-align: bottom;
+    flex-direction: column;
+    z-index: 1;
+    color: white;
+    margin: 35px;
+    position: absolute; /* Add this to position the text over the image */
+    bottom: 0; /* Position at the bottom of the header */
+    left: 0; /* Align to the left */
+  }
   .top-image {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
     z-index: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
     filter: brightness(0.9);
   }
 
@@ -70,15 +86,5 @@ try {
   }
   h3 {
     font-weight: bold;
-  }
-
-  .headerText {
-    display: flex;
-    position: absolute;
-    flex-direction: column;
-    z-index: 1;
-    color: white;
-    bottom: 0;
-    margin: 35px;
   }
 </style>

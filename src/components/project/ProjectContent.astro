@@ -46,62 +46,58 @@ try {
 }
 ---
 
-<center>
-  {
-    // If the gallery exists
-    lowerContent?.gallery ? (
-      // Then map the images in the gallery
-      <article>
-        <Grid>
-          {/* Map the landscape orientation images */}
-          {lowerContent?.gallery
-            .filter(
-              (image) =>
-                image.fields.file.details.image.width >
-                image.fields.file.details.image.height
-            )
-            .map((image) => (
-              <Image
-                data-aos="fade-up"
-                class="blurry-load gallery-image"
-                alt=""
-                width={960}
-                height={540}
-                loading="lazy"
-                data-large={`${image.fields.file.url}?fm=webp&w=960&h=540&q=55&fit=fill`}
-                src={`${image.fields.file.url}?fm=webp&w=240&h=135&q=2&fit=fill`}
-                aspect-ratio="3/2"
-              />
-            ))}
-          {/* Map the portrait orientation images */}
+{
+  // If the gallery exists
+  lowerContent?.gallery ? (
+    // Then map the images in the gallery
+    <article>
+      <Grid>
+        {/* Map the landscape orientation images */}
+        {lowerContent?.gallery
+          .filter(
+            (image) =>
+              image.fields.file.details.image.width >
+              image.fields.file.details.image.height
+          )
+          .map((image) => (
+            <Image
+              class="blurry-load gallery-image"
+              alt=""
+              width={960}
+              height={540}
+              loading="lazy"
+              data-large={`${image.fields.file.url}?fm=webp&w=960&h=540&q=55&fit=fill`}
+              src={`${image.fields.file.url}?fm=webp&w=240&h=135&q=2&fit=fill`}
+              aspect-ratio="3/2"
+            />
+          ))}
+        {/* Map the portrait orientation images */}
 
-          {lowerContent?.gallery
-            .filter(
-              (image) =>
-                image.fields.file.details.image.width <
-                image.fields.file.details.image.height
-            )
-            .map((image) => (
-              <Image
-                data-aos="fade-up"
-                class="blurry-load gallery-image"
-                alt=""
-                width={540}
-                height={960}
-                loading="lazy"
-                data-large={`${image.fields.file.url}?fm=webp&w=540&h=960&q=55&fit=fill`}
-                src={`${image.fields.file.url}?fm=webp&w=135&h=240&q=2&fit=fill`}
-                aspect-ratio="2/3"
-              />
-            ))}
-        </Grid>
-      </article>
-    ) : (
-      // If it doesn't exist, then show the article content
-      <article set:html={lowerContent?.content ? lowerContent?.content : ''} />
-    )
-  }
-</center>
+        {lowerContent?.gallery
+          .filter(
+            (image) =>
+              image.fields.file.details.image.width <
+              image.fields.file.details.image.height
+          )
+          .map((image) => (
+            <Image
+              class="blurry-load gallery-image"
+              alt=""
+              width={540}
+              height={960}
+              loading="lazy"
+              data-large={`${image.fields.file.url}?fm=webp&w=540&h=960&q=55&fit=fill`}
+              src={`${image.fields.file.url}?fm=webp&w=135&h=240&q=2&fit=fill`}
+              aspect-ratio="2/3"
+            />
+          ))}
+      </Grid>
+    </article>
+  ) : (
+    // If it doesn't exist, then show the article content
+    <article set:html={lowerContent?.content ? lowerContent?.content : ''} />
+  )
+}
 
 <style>
   .gallery-image {
@@ -110,13 +106,9 @@ try {
     margin: 5px;
     border-radius: 3px;
   }
-  center {
-    display: flex;
-    justify-content: center;
-  }
+
   article {
     display: block;
-    position: absolute;
     top: 100vh;
     align-items: center;
     margin: 5px;
