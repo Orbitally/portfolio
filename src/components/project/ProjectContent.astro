@@ -2,27 +2,39 @@
 //@ts-nocheck
 
 import { Image } from 'astro:assets';
-
 import { contentfulClient } from '../../lib/contentful';
 import type { Project } from '../../lib/contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS } from '@contentful/rich-text-types';
 
-let lowerContent;
+interface Props {
+  gallery?: any[];
+  pagination?: any;
+  projectContent?: any;
+  isFirstPage?: boolean;
+}
 
+const { gallery, pagination, projectContent, isFirstPage } = Astro.props;
 const { slug } = Astro.params;
+
+// Get URL parameters for gallery pagination
+const url = new URL(Astro.request.url);
+const currentPage = parseInt(url.searchParams.get('page') || '1');
+const IMAGES_PER_PAGE = 12; // Adjust this number as needed
+
+let lowerContent;
+let paginatedGallery;
+let hasNextPage = false;
 
 const options = {
   preserveWhitespace: true,
   renderNode: {
-    // Render the embedded images with all the custom styling options
     [BLOCKS.EMBEDDED_ASSET]: ({
       data: {
         target: { fields },
       },
     }) =>
       `<img class="blurry-load" style="margin: 10px 10px 10px 0px; border-radius: 3px;" src="https://${fields.file.url}?fm=webp&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=webp&w=1920&h=1080&q=35&fit=pad width="40%" height="auto" alt="${fields.description}"/>`,
-    // Render the text of the paragraph in a justified way
     [BLOCKS.PARAGRAPH]: (node, next) =>
       `<p style="text-align: justify";>${next(node.content)}</p>`,
   },
@@ -34,11 +46,23 @@ try {
     'fields.slug': slug,
     select: 'sys.id,fields.content,fields.gallery',
   });
-  const { content, gallery } = data.items[0].fields;
+  const { content, gallery: fullGallery } = data.items[0].fields;
+  
   lowerContent = {
     content: documentToHtmlString(content, options),
-    gallery,
+    gallery: fullGallery,
   };
+
+  // Paginate the gallery if it exists
+  if (fullGallery && fullGallery.length > 0) {
+    const totalImages = fullGallery.length;
+    const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
+    const startIndex = (currentPage - 1) * IMAGES_PER_PAGE;
+    const endIndex = startIndex + IMAGES_PER_PAGE;
+    
+    paginatedGallery = fullGallery.slice(startIndex, endIndex);
+    hasNextPage = currentPage < totalPages;
+  }
 } catch (error) {
   console.error(error);
 }
@@ -47,17 +71,39 @@ try {
 {
   // If the gallery exists
   lowerContent?.gallery ? (
-    // Then map the images in the gallery
-    <article>
-      <div class="grid">
-        {lowerContent?.gallery.map((image) => (
+    // Then show the paginated images
+    <article class="gallery-container">
+      <div class="grid" id="gallery-grid">
+        {paginatedGallery?.map((image) => (
           <div class="grid-item">
             <img
               class="gallery-image"
               src={`${image.fields.file.url}?fm=webp&h=540&q=55`}
+              alt={image.fields.description || 'Gallery image'}
             />
           </div>
         ))}
+      </div>
+
+      <!-- Pagination navigation for Infinite Scroll -->
+      <nav class="pagination" style="display: none;">
+        {hasNextPage && (
+          <a class="pagination__next" href={`?page=${currentPage + 1}`}>
+            Next page
+          </a>
+        )}
+      </nav>
+
+      <!-- Loading and status indicators -->
+      <div class="page-load-status">
+        <div class="loader-ellips infinite-scroll-request">
+          <span class="loader-ellips__dot"></span>
+          <span class="loader-ellips__dot"></span>
+          <span class="loader-ellips__dot"></span>
+          <span class="loader-ellips__dot"></span>
+        </div>
+        <p class="infinite-scroll-last">End of gallery ✨</p>
+        <p class="infinite-scroll-error">Unable to load more images</p>
       </div>
     </article>
   ) : (
@@ -66,31 +112,105 @@ try {
   )
 }
 
+
+<!-- Masonry and Infinite Scroll initialization -->
 <script>
   import Masonry from 'masonry-layout';
   import ImagesLoaded from 'imagesloaded';
+  import InfiniteScroll from 'infinite-scroll';
 
-  ImagesLoaded('.grid', function () {
-    const msnry = new Masonry('.grid', {
+  document.addEventListener('DOMContentLoaded', function () {
+    const grid = document.querySelector('#gallery-grid');
+    
+    if (!grid) {
+      console.log('Gallery grid not found');
+      return;
+    }
+
+    // Initialize Masonry
+    const msnry = new Masonry(grid, {
       itemSelector: '.grid-item',
       gutter: 10,
       fitWidth: true,
     });
+
+    // Wait for initial images to load
+    ImagesLoaded(grid, function () {
+      msnry.layout();
+      console.log('Initial Masonry layout complete');
+    });
+
+    // Initialize Infinite Scroll
+    const infScroll = new InfiniteScroll(grid, {
+      path: '.pagination__next',
+      append: '.grid-item',
+      status: '.page-load-status',
+      scrollThreshold: 600,
+      // Use custom scroll container
+      elementScroll: '.split-right',
+      history: false,
+    });
+
+    // Event listeners for Infinite Scroll
+    infScroll.on('append', function(response, path, items) {
+      console.log('Infinite Scroll appended', items.length, 'new gallery items');
+      
+      // Dispatch custom event for new gallery images
+      const newImagesEvent = new CustomEvent('newGalleryImagesLoaded', {
+        detail: {
+          images: items,
+          count: items.length,
+        },
+      });
+      document.dispatchEvent(newImagesEvent);
+      console.log('🖼️ Dispatched newGalleryImagesLoaded event');
+
+      // Wait for new images to load, then layout Masonry
+      ImagesLoaded(items, function() {
+        msnry.appended(items);
+        msnry.layout();
+        console.log('Masonry layout updated with new items');
+      });
+    });
+
+    infScroll.on('load', function(response, path) {
+      console.log('Infinite Scroll loaded page:', path);
+    });
+
+    infScroll.on('last', function() {
+      console.log('Infinite Scroll reached last page');
+    });
+
+    infScroll.on('error', function(error, path) {
+      console.error('Infinite Scroll error:', error, 'Path:', path);
+    });
+
+    // Store for debugging
+    window.infiniteScroll = infScroll;
+    
+    console.log('✅ Gallery Infinite Scroll and Masonry initialized');
   });
 </script>
 
 <style>
+  .gallery-container {
+    position: relative;
+  }
+
   .grid {
     margin: 0 auto;
   }
+  
   .grid-item {
     width: 15vw;
     height: auto;
+    margin-bottom: 10px;
   }
 
   .grid-item img {
     width: 100%;
     border-radius: 3px;
+    display: block;
   }
 
   article {
@@ -113,5 +233,65 @@ try {
     color: white;
     bottom: 0;
     margin: 35px;
+  }
+
+  /* Hide pagination navigation (used only by Infinite Scroll) */
+  .pagination {
+    display: none !important;
+  }
+
+  /* Loading status styles */
+  .page-load-status {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+  }
+
+  .infinite-scroll-request {
+    display: block;
+  }
+
+  .infinite-scroll-last,
+  .infinite-scroll-error {
+    display: none;
+  }
+
+  .infinite-scroll-last.show,
+  .infinite-scroll-error.show {
+    display: block;
+  }
+
+  .loader-ellips {
+    font-size: 20px;
+    position: relative;
+    width: 4em;
+    height: 1em;
+    margin: 10px auto;
+  }
+
+  .loader-ellips__dot {
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    background: #555;
+    position: absolute;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .loader-ellips__dot:nth-child(1) { left: 0; animation-delay: 0s; }
+  .loader-ellips__dot:nth-child(2) { left: 1.5em; animation-delay: 0.3s; }
+  .loader-ellips__dot:nth-child(3) { left: 3em; animation-delay: 0.6s; }
+  .loader-ellips__dot:nth-child(4) { left: 4.5em; animation-delay: 0.9s; }
+
+  @keyframes pulse {
+    0%, 80%, 100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 </style>
