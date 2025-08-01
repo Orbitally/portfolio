@@ -95,7 +95,6 @@ try {
           <span class="loader-ellips__dot" />
           <span class="loader-ellips__dot" />
         </div>
-        <p class="infinite-scroll-last">End of gallery ✨</p>
         <p class="infinite-scroll-error">Unable to load more images</p>
       </div>
     </article>
@@ -147,8 +146,6 @@ try {
       history: false,
       outlayer: msnry,
     });
-
-    console.log('Infinite Scroll initialized');
   });
 </script>
 
@@ -206,6 +203,9 @@ try {
 
   /* Loading status styles */
   .page-load-status {
+    display: none;
+  }
+  .page-load-status.show {
     padding: 20px;
     text-align: center;
     color: var(--lightgrey);
@@ -215,12 +215,10 @@ try {
     display: block;
   }
 
-  .infinite-scroll-last,
   .infinite-scroll-error {
     display: none;
   }
 
-  .infinite-scroll-last.show,
   .infinite-scroll-error.show {
     display: block;
   }
