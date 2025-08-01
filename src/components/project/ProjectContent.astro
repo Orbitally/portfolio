@@ -110,42 +110,45 @@ try {
   import Masonry from 'masonry-layout';
   import InfiniteScroll from 'infinite-scroll';
   import ImagesLoaded from 'imagesloaded';
-  import { Image } from 'astro:assets';
 
-  const grid = document.querySelector('.grid');
+  document.addEventListener('astro:page-load', () => {
+    const grid = document.querySelector('.grid');
 
-  // Initialize Masonry
-  const msnry = new Masonry(grid, {
-    itemSelector: 'none',
-    columnWidth: 20,
-    gutter: 10,
-    fitWidth: true,
-    stagger: 30,
-    // nicer reveal transition
-    visibleStyle: { transform: 'translateY(0)', opacity: 1 },
-    hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
-  });
-  // Wait for initial images to load
-  ImagesLoaded(grid, function () {
-    grid.classList.remove('are-images-unloaded');
-    msnry.options.itemSelector = '.grid-item';
-    const items = grid.querySelectorAll('.grid-item');
-    msnry.appended(items);
-  });
+    // Initialize Masonry
+    const msnry = new Masonry(grid, {
+      itemSelector: 'none',
+      columnWidth: 20,
+      gutter: 10,
+      fitWidth: true,
+      stagger: 30,
+      // nicer reveal transition
+      visibleStyle: { transform: 'translateY(0)', opacity: 1 },
+      hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
+    });
+    // Wait for initial images to load
+    ImagesLoaded(grid, function () {
+      grid.classList.remove('are-images-unloaded');
+      msnry.options.itemSelector = '.grid-item';
+      const items = grid.querySelectorAll('.grid-item');
+      msnry.appended(items);
+    });
 
-  // Make imagesLoaded available for InfiniteScroll
-  InfiniteScroll.imagesLoaded = ImagesLoaded;
+    // Make imagesLoaded available for InfiniteScroll
+    InfiniteScroll.imagesLoaded = ImagesLoaded;
 
-  // Initialize Infinite Scroll
-  const infScroll = new InfiniteScroll(grid, {
-    path: '.pagination-next',
-    append: '.grid-item',
-    status: '.page-load-status',
-    scrollThreshold: 600,
-    // Use custom scroll container
-    elementScroll: '.split-right',
-    history: false,
-    outlayer: msnry,
+    // Initialize Infinite Scroll
+    const infScroll = new InfiniteScroll(grid, {
+      path: '.pagination-next',
+      append: '.grid-item',
+      status: '.page-load-status',
+      scrollThreshold: 600,
+      // Use custom scroll container
+      elementScroll: '.split-right',
+      history: false,
+      outlayer: msnry,
+    });
+
+    console.log('Infinite Scroll initialized');
   });
 </script>
 
