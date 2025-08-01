@@ -12,31 +12,377 @@ import '../styles/animations.css';
 import { contentfulClient } from '../lib/contentful';
 import type { Project } from '../lib/contentful';
 
-const entires = await contentfulClient.getEntries<Project>({
+// Get URL parameters
+const url = new URL(Astro.request.url);
+const currentPage = parseInt(url.searchParams.get('page') || '1');
+const TILES_PER_PAGE = 6; // Adjust this number as needed
+
+const entries = await contentfulClient.getEntries<Project>({
   content_type: 'project',
   order: '-fields.date',
 });
 
-const tiles = entires.items.map((item) => {
+const allTiles = entries.items.map((item) => {
   const { title, subtitle, date, image, slug, columnNumber } = item.fields;
   return { title, subtitle, date, image, slug, columnNumber };
 });
+
+// Calculate pagination
+const totalTiles = allTiles.length;
+const totalPages = Math.ceil(totalTiles / TILES_PER_PAGE);
+const startIndex = (currentPage - 1) * TILES_PER_PAGE;
+const endIndex = startIndex + TILES_PER_PAGE;
+const currentTiles = allTiles.slice(startIndex, endIndex);
+const hasNextPage = currentPage < totalPages;
 ---
 
 <Layout>
+  <div class="tiles-container">
+    {
+      // map the current page tiles to the Tile component
+      currentTiles.map((tile) => (
+        <Tile
+          title={tile.title}
+          date={tile.date}
+          image={`${tile.image.fields.file.url}`}
+          slug={tile.slug}
+        />
+      ))
+    }
+  </div>
+
+  <!-- Hidden pagination link for infinite scroll -->
   {
-    // map all the tiles that are in column one to the Tile component
-    tiles.map((tile) => (
-      <Tile
-        title={tile.title}
-        date={tile.date}
-        image={`${tile.image.fields.file.url}`}
-        slug={tile.slug}
-      />
-    ))
+    hasNextPage && (
+      <a
+        href={`?page=${currentPage + 1}`}
+        class="pagination-next"
+        style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;"
+      >
+        Next
+      </a>
+    )
   }
-  <center>
-    <p>More albums coming soon 👀</p>
-  </center>
+
+  <!-- Loading indicator -->
+  <div class="page-load-status">
+    <div class="loader-ellips infinite-scroll-request">
+      <span class="loader-ellips__dot"></span>
+      <span class="loader-ellips__dot"></span>
+      <span class="loader-ellips__dot"></span>
+      <span class="loader-ellips__dot"></span>
+    </div>
+    <p class="infinite-scroll-last">End of albums</p>
+    <p class="infinite-scroll-error">No more albums to load</p>
+  </div>
+
+  {
+    !hasNextPage && (
+      <center>
+        <p>More albums coming soon 👀</p>
+      </center>
+    )
+  }
 </Layout>
+
+<!-- Infinite scroll script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.querySelector('.tiles-container');
+    const nextLink = document.querySelector('.pagination-next');
+    const scrollContainer = document.querySelector('.split-right');
+
+    console.log(
+      'Infinite scroll init - Container:',
+      !!container,
+      'Next link:',
+      !!nextLink,
+      'Scroll container:',
+      !!scrollContainer
+    );
+
+    if (!container) {
+      console.log('Container not found');
+      return;
+    }
+
+    if (!nextLink) {
+      console.log(
+        'Next link not found - probably last page or no more content'
+      );
+      return;
+    }
+
+    if (!scrollContainer) {
+      console.log('Scroll container (.split-right) not found');
+      return;
+    }
+
+    let loading = false;
+    let currentNextLink = nextLink;
+
+    function loadMoreContent() {
+      if (loading || !currentNextLink) {
+        console.log('Already loading or no more pages');
+        return;
+      }
+
+      loading = true;
+      console.log('Loading more content from:', currentNextLink.href);
+
+      // Show loading indicator
+      const loadStatus = document.querySelector('.page-load-status');
+      if (loadStatus) {
+        loadStatus.style.display = 'block';
+      }
+
+      fetch(currentNextLink.href)
+        .then((response) => response.text())
+        .then((html) => {
+          console.log('Received HTML response');
+
+          // Parse the HTML
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          // Find new tiles
+          const newTiles = doc.querySelectorAll('.tiles-container > *');
+
+          console.log('Found', newTiles.length, 'new tiles');
+
+          if (newTiles.length > 0) {
+            // Store new tiles in an array
+            const newTileElements = [];
+
+            // Add new tiles to the container
+            newTiles.forEach((tile) => {
+              const clonedTile = tile.cloneNode(true);
+              container.appendChild(clonedTile);
+              newTileElements.push(clonedTile);
+            });
+
+            console.log('Appended new tiles');
+
+            // Dispatch custom event for new tiles loaded
+            const newTilesEvent = new CustomEvent('newTilesLoaded', {
+              detail: {
+                tiles: newTileElements,
+                count: newTileElements.length,
+              },
+            });
+            document.dispatchEvent(newTilesEvent);
+            console.log(
+              '🎉 Dispatched newTilesLoaded event with',
+              newTileElements.length,
+              'tiles'
+            );
+
+            // Update the next link
+            const newNextLink = doc.querySelector('.pagination-next');
+            if (newNextLink) {
+              currentNextLink.href = newNextLink.href;
+              console.log('Updated next link to:', newNextLink.href);
+            } else {
+              console.log('No more pages - removing next link');
+              currentNextLink = null;
+
+              // Show "More albums coming soon" message
+              const endMessage = doc.querySelector('center p');
+              if (endMessage && !document.querySelector('center p')) {
+                const centerEl = document.createElement('center');
+                centerEl.appendChild(endMessage.cloneNode(true));
+                scrollContainer.appendChild(centerEl);
+              }
+            }
+          }
+
+          loading = false;
+
+          // Hide loading indicator
+          if (loadStatus) {
+            loadStatus.style.display = 'none';
+          }
+        })
+        .catch((error) => {
+          console.error('Error loading more content:', error);
+          loading = false;
+
+          // Hide loading indicator
+          const loadStatus = document.querySelector('.page-load-status');
+          if (loadStatus) {
+            loadStatus.style.display = 'none';
+          }
+        });
+    }
+
+    // Scroll event listener for the split-right container
+    function handleScroll() {
+      // Get scroll values from the split-right element
+      const scrollTop = scrollContainer.scrollTop;
+      const containerHeight = scrollContainer.clientHeight;
+      const scrollHeight = scrollContainer.scrollHeight;
+
+      const distanceFromBottom = scrollHeight - (scrollTop + containerHeight);
+
+      // Debug: Log scroll info occasionally
+      if (Math.random() < 0.05) {
+        console.log('📊 Split-Right Scroll Debug:', {
+          scrollTop: Math.round(scrollTop),
+          containerHeight: Math.round(containerHeight),
+          scrollHeight: Math.round(scrollHeight),
+          distanceFromBottom: Math.round(distanceFromBottom),
+          loading,
+          hasNextLink: !!currentNextLink,
+        });
+      }
+
+      // Trigger if close to bottom
+      const shouldTrigger =
+        distanceFromBottom <= 300 && !loading && currentNextLink;
+
+      if (shouldTrigger) {
+        console.log('🚀 AUTO-TRIGGERING LOAD!', {
+          scrollTop: Math.round(scrollTop),
+          distanceFromBottom: Math.round(distanceFromBottom),
+          containerHeight: Math.round(containerHeight),
+          scrollHeight: Math.round(scrollHeight),
+          loading: loading,
+          hasNextLink: !!currentNextLink,
+        });
+        loadMoreContent();
+      }
+    }
+
+    // Add scroll listener to the split-right element
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    console.log('✅ Scroll listener added to .split-right element');
+
+    // Create debug buttons with higher z-index
+    const debugContainer = document.createElement('div');
+    debugContainer.style.position = 'fixed';
+    debugContainer.style.top = '10px';
+    debugContainer.style.right = '10px';
+    debugContainer.style.zIndex = '999999';
+    debugContainer.style.display = 'flex';
+    debugContainer.style.gap = '10px';
+
+    // Manual load button
+    const testButton = document.createElement('button');
+    testButton.textContent = 'Manual Load';
+    testButton.style.background = 'green';
+    testButton.style.color = 'white';
+    testButton.style.padding = '10px';
+    testButton.style.borderRadius = '5px';
+    testButton.style.border = 'none';
+    testButton.style.cursor = 'pointer';
+    testButton.onclick = () => {
+      console.log('🔘 Manual load button clicked');
+      loadMoreContent();
+    };
+
+    // Debug scroll button
+    const debugButton = document.createElement('button');
+    debugButton.textContent = 'Debug';
+    debugButton.style.background = 'blue';
+    debugButton.style.color = 'white';
+    debugButton.style.padding = '10px';
+    debugButton.style.borderRadius = '5px';
+    debugButton.style.border = 'none';
+    debugButton.style.cursor = 'pointer';
+    debugButton.onclick = () => {
+      const scrollTop = scrollContainer.scrollTop;
+      const containerHeight = scrollContainer.clientHeight;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const distanceFromBottom = scrollHeight - (scrollTop + containerHeight);
+
+      console.log('🔍 Split-Right Scroll Info:', {
+        scrollTop: Math.round(scrollTop),
+        clientHeight: Math.round(containerHeight),
+        scrollHeight: Math.round(scrollHeight),
+        distanceFromBottom: Math.round(distanceFromBottom),
+        loading: loading,
+        hasNextLink: !!currentNextLink,
+        shouldTrigger: distanceFromBottom <= 300 && !loading && currentNextLink,
+      });
+    };
+
+    // Add buttons to container and container to page
+    debugContainer.appendChild(testButton);
+    debugContainer.appendChild(debugButton);
+    document.body.appendChild(debugContainer);
+
+    // Check initial page state
+    setTimeout(() => {
+      console.log('🔍 Initial split-right check:');
+      debugButton.click();
+    }, 1000);
+  });
+</script>
+
 <script src="../js/mobileHover.js"></script>
+
+<style>
+  .tiles-container {
+    /* Add any styling needed for your tiles container */
+  }
+
+  /* Loading status styles */
+  .page-load-status {
+    display: none;
+    padding: 20px;
+    text-align: center;
+    color: #999;
+  }
+
+  .infinite-scroll-request .page-load-status {
+    display: block;
+  }
+
+  .loader-ellips {
+    font-size: 20px;
+    position: relative;
+    width: 4em;
+    height: 1em;
+    margin: 10px auto;
+  }
+
+  .loader-ellips__dot {
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    background: #555;
+    position: absolute;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .loader-ellips__dot:nth-child(1) {
+    left: 0;
+    animation-delay: 0s;
+  }
+  .loader-ellips__dot:nth-child(2) {
+    left: 1.5em;
+    animation-delay: 0.3s;
+  }
+  .loader-ellips__dot:nth-child(3) {
+    left: 3em;
+    animation-delay: 0.6s;
+  }
+  .loader-ellips__dot:nth-child(4) {
+    left: 4.5em;
+    animation-delay: 0.9s;
+  }
+
+  @keyframes pulse {
+    0%,
+    80%,
+    100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+</style>

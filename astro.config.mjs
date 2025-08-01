@@ -8,7 +8,7 @@ import robotsTxt from 'astro-robots-txt';
 // https://astro.build/config
 export default defineConfig({
   prefetch: {
-    defaultStrategy: 'viewport',
+    defaultStrategy: 'load',
   },
   output: 'server',
   site: 'https://jacob.kreindler.ca',

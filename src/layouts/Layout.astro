@@ -143,6 +143,9 @@ import '../styles/blurry-load.css';
       document.addEventListener('astro:after-swap', () => {
         blurryImageLoad.load();
       });
+      document.addEventListener('newTilesLoaded', () => {
+        blurryImageLoad.load();
+      });
     </script>
     <SpeedInsights />
     <ClientRouter />
