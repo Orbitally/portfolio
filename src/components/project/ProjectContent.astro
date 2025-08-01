@@ -215,7 +215,6 @@ try {
 
   article {
     display: block;
-    top: 100vh;
     align-items: center;
     margin: 5px;
     padding: 10px;
@@ -244,7 +243,7 @@ try {
   .page-load-status {
     padding: 20px;
     text-align: center;
-    color: #999;
+    color: var(--lightgrey);
   }
 
   .infinite-scroll-request {
@@ -271,10 +270,10 @@ try {
 
   .loader-ellips__dot {
     display: block;
-    width: 1em;
-    height: 1em;
+    width: .75em;
+    height: .75em;
     border-radius: 0.5em;
-    background: #555;
+    background: var(--darkgrey);
     position: absolute;
     animation: pulse 1.5s ease-in-out infinite;
   }
