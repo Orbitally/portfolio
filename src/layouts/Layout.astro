@@ -8,6 +8,26 @@ import Navbar from '../components/Navbar.astro';
 import '@fontsource-variable/baloo-2';
 
 import '../styles/blurry-load.css';
+
+// Vertial slide SPA animation
+const anim = {
+  old: {
+    name: 'verticalSlide',
+    duration: '0.5s',
+    easing: 'ease-in-out',
+  },
+  new: {
+    name: 'verticalSlide',
+    duration: '0.5s',
+    easing: 'ease-in',
+    direction: 'reverse',
+  },
+};
+
+const verticalSlideTransition = {
+  forwards: anim,
+  backwards: anim,
+};
 ---
 
 <!doctype html>
@@ -160,7 +180,7 @@ import '../styles/blurry-load.css';
       >
         <Navbar />
       </div>
-      <div class="split-right" transition:animate="slide">
+      <div class="split-right" transition:animate={verticalSlideTransition}>
         <slot />
       </div>
     </div>
@@ -205,13 +225,20 @@ import '../styles/blurry-load.css';
         }
       }
 
-      @keyframes slide-left {
+      /* Verical Slide SPA Animation */
+      @keyframes verticalSlide {
         0% {
-          transform: translateX(0);
+          transform: translateY(100%);
+          opacity: 1;
         }
         100% {
-          transform: translateX(-100%);
+          transform: translateY(0);
+          opacity: 0;
         }
+      }
+
+      .astro-root {
+        overflow: hidden;
       }
     </style>
     <!-- Non-global styles (for the splits) -->
