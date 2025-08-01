@@ -3,8 +3,6 @@
 
 import { Image } from 'astro:assets';
 
-import Grid from '../../layouts/Grid.astro';
-
 import { contentfulClient } from '../../lib/contentful';
 import type { Project } from '../../lib/contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
@@ -23,7 +21,7 @@ const options = {
         target: { fields },
       },
     }) =>
-      `<img data-aos="fade-up" class="blurry-load" style="margin: 10px 10px 10px 0px; border-radius: 3px;" src="https://${fields.file.url}?fm=webp&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=webp&w=1920&h=1080&q=35&fit=pad width="40%" height="auto" alt="${fields.description}"/>`,
+      `<img class="blurry-load" style="margin: 10px 10px 10px 0px; border-radius: 3px;" src="https://${fields.file.url}?fm=webp&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=webp&w=1920&h=1080&q=35&fit=pad width="40%" height="auto" alt="${fields.description}"/>`,
     // Render the text of the paragraph in a justified way
     [BLOCKS.PARAGRAPH]: (node, next) =>
       `<p style="text-align: justify";>${next(node.content)}</p>`,
@@ -46,77 +44,57 @@ try {
 }
 ---
 
-<center>
-  {
-    // If the gallery exists
-    lowerContent?.gallery ? (
-      // Then map the images in the gallery
-      <article>
-        <Grid>
-          {/* Map the landscape orientation images */}
-          {lowerContent?.gallery
-            .filter(
-              (image) =>
-                image.fields.file.details.image.width >
-                image.fields.file.details.image.height
-            )
-            .map((image) => (
-              <Image
-                data-aos="fade-up"
-                class="blurry-load gallery-image"
-                alt=""
-                width={960}
-                height={540}
-                loading="lazy"
-                data-large={`${image.fields.file.url}?fm=webp&w=960&h=540&q=55&fit=fill`}
-                src={`${image.fields.file.url}?fm=webp&w=240&h=135&q=2&fit=fill`}
-                aspect-ratio="3/2"
-              />
-            ))}
-          {/* Map the portrait orientation images */}
+{
+  // If the gallery exists
+  lowerContent?.gallery ? (
+    // Then map the images in the gallery
+    <article>
+      <div class="grid">
+        {lowerContent?.gallery.map((image) => (
+          <div class="grid-item">
+            <img
+              class="gallery-image"
+              src={`${image.fields.file.url}?fm=webp&h=540&q=55`}
+            />
+          </div>
+        ))}
+      </div>
+    </article>
+  ) : (
+    // If it doesn't exist, then show the article content
+    <article set:html={lowerContent?.content ? lowerContent?.content : ''} />
+  )
+}
 
-          {lowerContent?.gallery
-            .filter(
-              (image) =>
-                image.fields.file.details.image.width <
-                image.fields.file.details.image.height
-            )
-            .map((image) => (
-              <Image
-                data-aos="fade-up"
-                class="blurry-load gallery-image"
-                alt=""
-                width={540}
-                height={960}
-                loading="lazy"
-                data-large={`${image.fields.file.url}?fm=webp&w=540&h=960&q=55&fit=fill`}
-                src={`${image.fields.file.url}?fm=webp&w=135&h=240&q=2&fit=fill`}
-                aspect-ratio="2/3"
-              />
-            ))}
-        </Grid>
-      </article>
-    ) : (
-      // If it doesn't exist, then show the article content
-      <article set:html={lowerContent?.content ? lowerContent?.content : ''} />
-    )
-  }
-</center>
+<script>
+  import Masonry from 'masonry-layout';
+  import ImagesLoaded from 'imagesloaded';
+
+  ImagesLoaded('.grid', function () {
+    const msnry = new Masonry('.grid', {
+      itemSelector: '.grid-item',
+      gutter: 10,
+      fitWidth: true,
+    });
+  });
+</script>
 
 <style>
-  .gallery-image {
-    width: 100%;
+  .grid {
+    margin: 0 auto;
+  }
+  .grid-item {
+    width: 15vw;
     height: auto;
-    margin: 5px;
+  }
+
+  .grid-item img {
+    width: 100%;
     border-radius: 3px;
   }
-  center {
-    display: flex;
-    justify-content: center;
-  }
+
   article {
     display: block;
-    position: absolute;
     top: 100vh;
     align-items: center;
     margin: 5px;
