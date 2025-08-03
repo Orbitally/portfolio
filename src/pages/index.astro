@@ -13,36 +13,172 @@ import '../js/mobileHover.js';
 import { contentfulClient } from '../lib/contentful';
 import type { Project } from '../lib/contentful';
 
-const entires = await contentfulClient.getEntries<Project>({
+// Get URL parameters for pagination
+const url = new URL(Astro.request.url);
+const currentPage = parseInt(url.searchParams.get('page') || '1');
+const TILES_PER_PAGE = 4; // Adjust this number as needed
+
+const entries = await contentfulClient.getEntries<Project>({
   content_type: 'project',
   order: '-fields.date',
 });
 
-const tiles = entires.items.map((item) => {
+const allTiles = entries.items.map((item) => {
   const { title, subtitle, date, image, slug, columnNumber } = item.fields;
   return { title, subtitle, date, image, slug, columnNumber };
 });
+
+// Paginate the tiles
+const totalTiles = allTiles.length;
+const totalPages = Math.ceil(totalTiles / TILES_PER_PAGE);
+const startIndex = (currentPage - 1) * TILES_PER_PAGE;
+const endIndex = startIndex + TILES_PER_PAGE;
+
+const paginatedTiles = allTiles.slice(startIndex, endIndex);
+const hasNextPage = currentPage < totalPages;
 ---
 
 <Layout>
+  <div class="tiles-container">
+    <!-- Map the paginated tiles -->
+    {
+      paginatedTiles.map((tile) => (
+        <Tile
+          title={tile.title}
+          date={tile.date}
+          image={`${tile.image.fields.file.url}`}
+          slug={tile.slug}
+          transition:name={`project-${tile.slug}`}
+        />
+      ))
+    }
+  </div>
+
+  <!-- Hidden pagination link for infinite scroll -->
   {
-    (
-      <div class="container">
-        {/* Map all the tiles */}
-        {tiles.map((tile) => (
-          <Tile
-            title={tile.title}
-            date={tile.date}
-            image={`${tile.image.fields.file.url}`}
-            slug={tile.slug}
-            transition:name={`project-${tile.slug}`}
-          />
-        ))}
-      </div>
+    hasNextPage && (
+      <a
+        href={`?page=${currentPage + 1}`}
+        class="pagination-next"
+        style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;"
+      >
+        Next page
+      </a>
     )
   }
+
+  <!-- Loading and status indicators -->
+  <div class="page-load-status">
+    <div class="loader-ellips infinite-scroll-request">
+      <span class="loader-ellips__dot"></span>
+      <span class="loader-ellips__dot"></span>
+      <span class="loader-ellips__dot"></span>
+      <span class="loader-ellips__dot"></span>
+    </div>
+    <p class="infinite-scroll-last">No more projects to show ✨</p>
+    <p class="infinite-scroll-error">Unable to load more projects</p>
+  </div>
+
+  {
+    !hasNextPage && (
+      <center>
+        <p>More projects coming soon ✨</p>
+      </center>
+    )
+  }
+
+  <!-- Infinite Scroll and Parallax initialization -->
+  <script>
+    import InfiniteScroll from 'infinite-scroll';
+    import SimpleParallax from 'simple-parallax-js/vanilla';
+
+    document.addEventListener('astro:page-load', () => {
+      const container = document.querySelector('.tiles-container');
+      const nextLink = document.querySelector('.pagination-next');
+      const scrollContainer = document.querySelector('.split-right');
+
+      // Initialize parallax for existing images
+      function initializeParallax() {
+        const images = document.getElementsByClassName('tile-image');
+        if (images.length > 0 && scrollContainer) {
+          new SimpleParallax(images, {
+            scale: 1.4,
+            delay: 1.6,
+            orientation: 'up',
+            customContainer: scrollContainer,
+          });
+          console.log(
+            '✨ Parallax initialized for',
+            images.length,
+            'tile images'
+          );
+        }
+      }
+
+      // Initialize parallax for new images
+      function initializeNewParallax(newTiles) {
+        if (!scrollContainer || !newTiles.length) return;
+
+        const newImages = [];
+        newTiles.forEach((tile) => {
+          const images = tile.querySelectorAll('.tile-image');
+          images.forEach((img) => newImages.push(img));
+        });
+
+        if (newImages.length > 0) {
+          new SimpleParallax(newImages, {
+            scale: 1.4,
+            delay: 1.6,
+            orientation: 'up',
+            customContainer: scrollContainer,
+          });
+          console.log(
+            '✨ Parallax added to',
+            newImages.length,
+            'new tile images'
+          );
+        }
+      }
+
+      // Initialize parallax for existing tiles
+      setTimeout(initializeParallax, 100);
+
+      // Initialize Infinite Scroll if we have more pages
+      if (container && nextLink && scrollContainer) {
+        const infScroll = new InfiniteScroll(container, {
+          path: '.pagination-next',
+          append: '.tile',
+          status: '.page-load-status',
+          scrollThreshold: 300,
+          elementScroll: '.split-right',
+          history: false,
+        });
+
+        // Event listeners
+        infScroll.on('append', function (response, path, items) {
+          console.log('Infinite Scroll appended', items.length, 'new tiles');
+
+          // Initialize parallax for new tiles
+          setTimeout(() => {
+            initializeNewParallax(items);
+          }, 100);
+
+          // Dispatch custom event for new tiles
+          const newTilesEvent = new CustomEvent('newTilesLoaded', {
+            detail: {
+              tiles: items,
+              count: items.length,
+            },
+          });
+          document.dispatchEvent(newTilesEvent);
+          console.log('🎉 Dispatched newTilesLoaded event');
+        });
+      }
+    });
+  </script>
+
   <style>
-    .container {
+    .tiles-container {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -52,6 +188,81 @@ const tiles = entires.items.map((item) => {
       margin-top: 30vh;
       margin-bottom: 20px;
       width: 90%;
+    }
+
+    /* Loading status styles */
+    .page-load-status {
+      display: none;
+      padding: 20px;
+      text-align: center;
+      color: #999;
+    }
+
+    .infinite-scroll-request {
+      display: block;
+    }
+
+    .infinite-scroll-last,
+    .infinite-scroll-error {
+      display: none;
+    }
+
+    .infinite-scroll-last.show,
+    .infinite-scroll-error.show {
+      display: block;
+    }
+
+    .loader-ellips {
+      font-size: 20px;
+      position: relative;
+      width: 4em;
+      height: 1em;
+      margin: 10px auto;
+    }
+
+    .loader-ellips__dot {
+      display: block;
+      width: 1em;
+      height: 1em;
+      border-radius: 0.5em;
+      background: #555;
+      position: absolute;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .loader-ellips__dot:nth-child(1) {
+      left: 0;
+      animation-delay: 0s;
+    }
+    .loader-ellips__dot:nth-child(2) {
+      left: 1.5em;
+      animation-delay: 0.3s;
+    }
+    .loader-ellips__dot:nth-child(3) {
+      left: 3em;
+      animation-delay: 0.6s;
+    }
+    .loader-ellips__dot:nth-child(4) {
+      left: 4.5em;
+      animation-delay: 0.9s;
+    }
+
+    @keyframes pulse {
+      0%,
+      80%,
+      100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    center {
+      margin: 20px 0;
+      color: #999;
     }
   </style>
 </Layout>
