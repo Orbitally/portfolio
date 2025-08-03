@@ -40,18 +40,20 @@ const hasNextPage = currentPage < totalPages;
 
 <Layout>
   <div class="tiles-container">
-    <!-- Map the paginated tiles -->
-    {
-      paginatedTiles.map((tile) => (
-        <Tile
-          title={tile.title}
-          date={tile.date}
-          image={`${tile.image.fields.file.url}`}
-          slug={tile.slug}
-          transition:name={`project-${tile.slug}`}
-        />
-      ))
-    }
+    <div class="grid are-images-unloaded">
+      <!-- Map the paginated tiles -->
+      {
+        paginatedTiles.map((tile) => (
+          <Tile
+            title={tile.title}
+            date={tile.date}
+            image={`${tile.image.fields.file.url}`}
+            slug={tile.slug}
+            transition:name={`project-${tile.slug}`}
+          />
+        ))
+      }
+    </div>
   </div>
 
   <!-- Hidden pagination link for infinite scroll -->
@@ -88,92 +90,71 @@ const hasNextPage = currentPage < totalPages;
   }
 
   <!-- Infinite Scroll and Parallax initialization -->
+  <!-- Masonry and Infinite Scroll initialization -->
   <script>
+    import Masonry from 'masonry-layout';
     import InfiniteScroll from 'infinite-scroll';
+    import ImagesLoaded from 'imagesloaded';
     import SimpleParallax from 'simple-parallax-js/vanilla';
 
     document.addEventListener('astro:page-load', () => {
-      const container = document.querySelector('.tiles-container');
-      const nextLink = document.querySelector('.pagination-next');
+      const grid = document.querySelector('.grid');
+
+      // Initialize Masonry
+      const msnry = new Masonry(grid, {
+        itemSelector: '.tile',
+        columnWidth: '.tile',
+        gutter: 10,
+        fitWidth: true,
+        stagger: 30,
+        // nicer reveal transition
+        visibleStyle: { transform: 'translateY(0)', opacity: 1 },
+        hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
+      });
+      // Wait for initial images to load
+      ImagesLoaded(grid, function () {
+        grid.classList.remove('are-images-unloaded');
+        msnry.options.itemSelector = '.tile';
+        const items = grid.querySelectorAll('.tile');
+        msnry.appended(items);
+      });
+
+      // Make imagesLoaded available for InfiniteScroll
+      InfiniteScroll.imagesLoaded = ImagesLoaded;
+
+      // Initialize Infinite Scroll
+      const infScroll = new InfiniteScroll(grid, {
+        path: '.pagination-next',
+        append: '.tile',
+        status: '.page-load-status',
+        scrollThreshold: 1200,
+        // Use custom scroll container
+        elementScroll: '.split-right',
+        history: false,
+        outlayer: msnry,
+      });
+
+      const images = document.getElementsByClassName('tile-image');
       const scrollContainer = document.querySelector('.split-right');
 
-      // Initialize parallax for existing images
-      function initializeParallax() {
-        const images = document.getElementsByClassName('tile-image');
-        if (images.length > 0 && scrollContainer) {
-          new SimpleParallax(images, {
-            scale: 1.4,
-            delay: 1.6,
-            orientation: 'up',
-            customContainer: scrollContainer,
-          });
-          console.log(
-            '✨ Parallax initialized for',
-            images.length,
-            'tile images'
-          );
-        }
-      }
+      const SimpleParallaxInstance = new SimpleParallax(images, {
+        scale: 1.4,
+        delay: 1.6,
+        orientation: 'up',
+        customContainer: scrollContainer,
+      });
 
-      // Initialize parallax for new images
-      function initializeNewParallax(newTiles) {
-        if (!scrollContainer || !newTiles.length) return;
-
-        const newImages = [];
-        newTiles.forEach((tile) => {
-          const images = tile.querySelectorAll('.tile-image');
-          images.forEach((img) => newImages.push(img));
+      // When infinite scroll appends new items, reinitialize SimpleParallax
+      infScroll.on('append', function () {
+        SimpleParallaxInstance.destroy();
+        const newImages = document.querySelectorAll('.tile-image');
+        new SimpleParallax(newImages, {
+          scale: 1.4,
+          delay: 1.6,
+          orientation: 'up',
+          customContainer: scrollContainer,
         });
-
-        if (newImages.length > 0) {
-          new SimpleParallax(newImages, {
-            scale: 1.4,
-            delay: 1.6,
-            orientation: 'up',
-            customContainer: scrollContainer,
-          });
-          console.log(
-            '✨ Parallax added to',
-            newImages.length,
-            'new tile images'
-          );
-        }
-      }
-
-      // Initialize parallax for existing tiles
-      setTimeout(initializeParallax, 100);
-
-      // Initialize Infinite Scroll if we have more pages
-      if (container && nextLink && scrollContainer) {
-        const infScroll = new InfiniteScroll(container, {
-          path: '.pagination-next',
-          append: '.tile',
-          status: '.page-load-status',
-          scrollThreshold: 300,
-          elementScroll: '.split-right',
-          history: false,
-        });
-
-        // Event listeners
-        infScroll.on('append', function (response, path, items) {
-          console.log('Infinite Scroll appended', items.length, 'new tiles');
-
-          // Initialize parallax for new tiles
-          setTimeout(() => {
-            initializeNewParallax(items);
-          }, 100);
-
-          // Dispatch custom event for new tiles
-          const newTilesEvent = new CustomEvent('newTilesLoaded', {
-            detail: {
-              tiles: items,
-              count: items.length,
-            },
-          });
-          document.dispatchEvent(newTilesEvent);
-          console.log('🎉 Dispatched newTilesLoaded event');
-        });
-      }
+      });
     });
   </script>
 
@@ -188,6 +169,10 @@ const hasNextPage = currentPage < totalPages;
       margin-top: 30vh;
       margin-bottom: 20px;
       width: 90%;
+    }
+
+    .grid.are-images-unloaded {
+      opacity: 0;
     }
 
     /* Loading status styles */
