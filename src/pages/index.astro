@@ -91,7 +91,6 @@ const hasNextPage = currentPage < totalPages;
     // @ts-nocheck
     import InfiniteScroll from 'infinite-scroll';
     import ImagesLoaded from 'imagesloaded';
-    import SimpleParallax from 'simple-parallax-js/vanilla';
 
     document.addEventListener('astro:page-load', () => {
       const grid = document.querySelector('.tiles-container');
@@ -113,23 +112,8 @@ const hasNextPage = currentPage < totalPages;
       const images = document.getElementsByClassName('tile-image');
       const scrollContainer = document.querySelector('.split-right');
 
-      // const SimpleParallaxInstance = new SimpleParallax(images, {
-      //   scale: 1.4,
-      //   delay: 1.6,
-      //   orientation: 'up',
-      //   customContainer: scrollContainer,
-      // });
-
       // When infinite scroll appends new items, reinitialize SimpleParallax
       infScroll.on('append', function () {
-        // SimpleParallaxInstance.destroy();
-        // const newImages = document.querySelectorAll('.tile-image');
-        // new SimpleParallax(newImages, {
-        //   scale: 1.4,
-        //   delay: 1.6,
-        //   orientation: 'up',
-        //   customContainer: scrollContainer,
-        // });
         setTimeout(initializeMouseEffects, 100);
       });
 
