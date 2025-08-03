@@ -11,28 +11,44 @@ const { title, date, image, slug } = Astro.props;
   </div>
   <Image
     src=`https:${image}?fm=webp&w=10&h=10&q=5`
-    class="blurry-load"
-    data-large=`https:${image}?fm=webp&w=640&h=360&q=20`
+    class="blurry-load tile-image"
+    data-large=`https:${image}?fm=webp&w=840&h=560&q=50`
     alt=""
     width="100"
     height="100"
   />
 </a>
 
+<script>
+  import SimpleParallax from 'simple-parallax-js/vanilla';
+
+  const container = document.querySelector('.split-right');
+
+  const image = document.getElementsByClassName('tile-image');
+  new SimpleParallax(image, {
+    scale: 1.4,
+    delay: 1.6,
+    orientation: 'up',
+    customContainer: container,
+  });
+</script>
+
 <style>
   .tile {
     display: block;
-    width: 200px;
-    height: 200px;
+    width: 85%;
+    height: 50vh;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 8px;
     position: relative;
     filter: grayscale(100%);
     transition-duration: 0.4s;
+    border: 4px solid var(--lightgrey);
   }
   .tile:hover {
     filter: none;
     cursor: pointer;
+    border: 4px solid var(--darkgrey);
     transition-duration: 0.4s;
   }
   p {

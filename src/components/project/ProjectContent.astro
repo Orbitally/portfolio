@@ -27,7 +27,7 @@ const options = {
         target: { fields },
       },
     }) =>
-      `<img class="blurry-load" style="margin: 10px 10px 10px 0px; border-radius: 3px;" src="https://${fields.file.url}?fm=webp&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=webp&w=1920&h=1080&q=35&fit=pad width="40%" height="auto" alt="${fields.description}"/>`,
+      `<img class="blurry-load" style="margin: 10px 10px 10px 0px; border-radius: 8px;" src="https://${fields.file.url}?fm=webp&w=10&h=10&q=5" data-large=https://${fields.file.url}?fm=webp&w=1920&h=1080&q=35&fit=pad width="40%" alt="${fields.description}"/>`,
     [BLOCKS.PARAGRAPH]: (node, next) =>
       `<p style="text-align: justify";>${next(node.content)}</p>`,
   },
