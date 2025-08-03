@@ -16,7 +16,7 @@ import type { Project } from '../lib/contentful';
 // Get URL parameters for pagination
 const url = new URL(Astro.request.url);
 const currentPage = parseInt(url.searchParams.get('page') || '1');
-const TILES_PER_PAGE = 4; // Adjust this number as needed
+const TILES_PER_PAGE = 20; // Adjust this number as needed
 
 const entries = await contentfulClient.getEntries<Project>({
   content_type: 'project',
@@ -49,6 +49,7 @@ const hasNextPage = currentPage < totalPages;
           image={`${tile.image.fields.file.url}`}
           slug={tile.slug}
           transition:name={`project-${tile.slug}`}
+          speed="10"
         />
       ))
     }
@@ -89,33 +90,19 @@ const hasNextPage = currentPage < totalPages;
   <!-- Infinite Scroll, and Parallax initialization -->
   <script>
     // @ts-nocheck
-    import InfiniteScroll from 'infinite-scroll';
-    import ImagesLoaded from 'imagesloaded';
     import initializeMouseEffects from '../js/mouse-parallax.js';
+    import SimpleParallax from 'simple-parallax-js/vanilla';
 
     document.addEventListener('astro:page-load', () => {
-      const grid = document.querySelector('.tiles-container');
-
-      // Make imagesLoaded available for InfiniteScroll
-      InfiniteScroll.imagesLoaded = ImagesLoaded;
-
-      // Initialize Infinite Scroll
-      const infScroll = new InfiniteScroll(grid, {
-        path: '.pagination-next',
-        append: '.tile',
-        status: '.page-load-status',
-        scrollThreshold: 1200,
-        // Use custom scroll container
-        elementScroll: '.split-right',
-        history: false,
-      });
-
-      const images = document.getElementsByClassName('tile-image');
+      const images = document.querySelectorAll('.tile-image');
       const scrollContainer = document.querySelector('.split-right');
 
-      // When infinite scroll appends new items, reinitialize SimpleParallax
-      infScroll.on('append', function () {
-        setTimeout(initializeMouseEffects, 100);
+      new SimpleParallax(images, {
+        scale: 1.2,
+        delay: 1.6,
+        orientation: 'up',
+        customContainer: scrollContainer,
+        transition: 'cubic-bezier(0,0,0,1)',
       });
 
       setTimeout(initializeMouseEffects, 100);

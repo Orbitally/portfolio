@@ -24,7 +24,7 @@
     "imagesloaded": "^5.0.0",
     "infinite-scroll": "^5.0.0",
     "masonry-layout": "^4.2.2",
-    "rellax": "^1.12.1"
+    "simple-parallax-js": "^6.2.1"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.11",

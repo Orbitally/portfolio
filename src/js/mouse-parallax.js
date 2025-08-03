@@ -8,10 +8,12 @@ export default function initializeMouseEffects() {
 
     tile.addEventListener('mouseenter', () => {
       isHovering = true;
+      image.style.transition = 'ease 0.9s';
     });
 
     tile.addEventListener('mouseleave', () => {
       isHovering = false;
+      image.style.transition = 'ease 0.3s';
       // Reset shadow and image position
       tile.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
       if (image) {
