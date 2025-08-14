@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
-const { title, date, image, slug } = Astro.props;
+const { speed, title, date, image, slug } = Astro.props;
 ---
 
 <a class="tile" href=`/projects/${slug}`>
@@ -10,9 +10,8 @@ const { title, date, image, slug } = Astro.props;
     <p class="date">{date}</p>
   </div>
   <Image
-    src=`https:${image}?fm=webp&w=10&h=10&q=5`
-    class="blurry-load"
-    data-large=`https:${image}?fm=webp&w=640&h=360&q=20`
+    class="tile-image"
+    src=`https:${image}?fm=webp&w=840&h=560`
     alt=""
     width="100"
     height="100"
@@ -21,22 +20,44 @@ const { title, date, image, slug } = Astro.props;
 
 <style>
   .tile {
-    width: 200px;
-    height: 200px;
+    display: block;
+    width: 85%;
+    height: 50vh;
     overflow: hidden;
-    border-radius: 10px;
-    position: relative;
+    border-radius: 8px;
     filter: grayscale(100%);
-    transition-duration: 0.4s;
+    transition: filter 0.4s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    position: relative;
   }
+
   .tile:hover {
     filter: none;
     cursor: pointer;
-    transition-duration: 0.4s;
+    /* Removed box-shadow transition for smooth mouse following */
   }
+
+  .tile-image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Add styling for focused tiles from mobile hover */
+  .tile.in-focus {
+    filter: none;
+    transition: filter 0.3s ease;
+  }
+
   p {
     color: white;
   }
+
   .text {
     position: absolute;
     z-index: 1;
@@ -46,27 +67,17 @@ const { title, date, image, slug } = Astro.props;
 
   .title {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
     margin: 0;
   }
+
   .subtitle {
     font-size: 16px;
     margin: 0;
   }
+
   .date {
     font-size: 12px;
     margin: 0;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: relative;
-    transition-duration: 0.4s;
-  }
-  a:hover > img {
-    transition-duration: 0.3s;
-    scale: 105%;
   }
 </style>

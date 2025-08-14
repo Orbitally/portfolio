@@ -2,12 +2,36 @@
 import SpeedInsights from '@vercel/speed-insights/astro';
 import { ClientRouter } from 'astro:transitions';
 
-import '@fontsource/inter';
+import Navbar from '../components/Navbar.astro';
+
+// Supports weights 400-800
+import '@fontsource-variable/baloo-2';
+
 import '../styles/blurry-load.css';
+
+// Vertial slide SPA animation
+const anim = {
+  old: {
+    name: 'verticalSlide',
+    duration: '0.5s',
+    easing: 'ease-in-out',
+  },
+  new: {
+    name: 'verticalSlide',
+    duration: '0.5s',
+    easing: 'ease-in',
+    direction: 'reverse',
+  },
+};
+
+const verticalSlideTransition = {
+  forwards: anim,
+  backwards: anim,
+};
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" transition:name="root" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Jacob Kreindler's Portfolio" />
@@ -129,8 +153,6 @@ import '../styles/blurry-load.css';
       content="https://jacob.kreindler.ca/favicons/favicons/mstile-310x310.png"
     />
 
-    <link rel="stylesheet" href="https://unpkg.com/aos/dist/aos.css" />
-
     <title>Jacob Kreindler</title>
 
     <script>
@@ -138,7 +160,10 @@ import '../styles/blurry-load.css';
       const blurryImageLoad = new BlurryImageLoad();
       blurryImageLoad.load();
 
-      document.addEventListener('astro:page-load', () => {
+      document.addEventListener('astro:after-swap', () => {
+        blurryImageLoad.load();
+      });
+      document.addEventListener('newTilesLoaded', () => {
         blurryImageLoad.load();
       });
     </script>
@@ -147,31 +172,29 @@ import '../styles/blurry-load.css';
   </head>
 
   <body>
-    <slot />
-    <!-- <script src="../js/projectFrame.js"></script> -->
-
-    <script is:inline src="https://unpkg.com/aos/dist/aos.js"></script>
-    <script is:inline>
-      AOS.init({
-        duration: 400,
-        delay: 50,
-        once: true,
-        offset: 50,
-      });
-      document.addEventListener('astro:page-load', () => {
-        AOS.init({
-          duration: 400,
-          delay: 50,
-          once: true,
-          offset: 50,
-        });
-      });
-    </script>
+    <div class="split">
+      <div
+        class="split-left"
+        transition:name="split-left"
+        transition:animate="none"
+      >
+        <Navbar />
+      </div>
+      <div class="split-right" transition:animate={verticalSlideTransition}>
+        <slot />
+      </div>
+    </div>
 
     <style is:global>
+      :root {
+        --lightgrey: #cdcdcd;
+        --darkgrey: #505050;
+      }
       html {
-        font-family: 'Inter', sans-serif;
-        overflow-x: hidden;
+        font-family: 'Baloo 2 Variable', sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        overflow: hidden;
       }
 
       body {
@@ -201,16 +224,50 @@ import '../styles/blurry-load.css';
           scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
         }
       }
-    </style>
-    <!-- Custom Slide Animation -->
-    <style is:global>
-      @keyframes slide-left {
+
+      /* Verical Slide SPA Animation */
+      @keyframes verticalSlide {
         0% {
-          transform: translateX(0);
+          transform: translateY(100%);
+          opacity: 1;
         }
         100% {
-          transform: translateX(-100%);
+          transform: translateY(0);
+          opacity: 0;
         }
+      }
+
+      .astro-root {
+        overflow: hidden;
+      }
+    </style>
+    <!-- Non-global styles (for the splits) -->
+    <style>
+      .split {
+        display: flex;
+        flex-direction: row;
+        overflow-y: hidden;
+      }
+
+      .split-left {
+        display: flex;
+        flex-direction: column;
+        width: 12vw;
+        height: 100vh;
+        border-right: var(--lightgrey) solid 2.5px;
+        overflow-y: scroll;
+        z-index: 10;
+        scroll-behavior: smooth;
+      }
+
+      .split-right {
+        display: flex;
+        flex-direction: column;
+        width: 88vw;
+        height: 100vh;
+        padding-bottom: 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
     </style>
   </body>

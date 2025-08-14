@@ -1,109 +1,156 @@
 ---
+//@ts-nocheck
 import { Image } from 'astro:assets';
+
+import { contentfulClient } from '../lib/contentful';
+import type { ProjectNames } from '../lib/contentful';
+
+const entries = await contentfulClient.getEntries<ProjectNames>({
+  content_type: 'project',
+  order: '-fields.date',
+});
+
+const projectNames = entries.items.map((item) => {
+  const { title, slug, type } = item.fields;
+  return { title, slug, type, fields: item.fields };
+});
 ---
 
 <div class="navbar">
-  <div class="leftside">
-    <Image src="/favicon.ico" alt="descriptive text" width="30" height="30" />
-    <a data-astro-reload id="funtext" href="/">Jacob Kreindler</a>
-  </div>
-  <div class="rightside">
-    <a href="/projects">Projects</a>
+  <div class="section" id="headerSection">
+    <a class="logo" href="/">
+      <Image
+        loading="eager"
+        src="/favicon.ico"
+        alt="descriptive text"
+        width="40"
+        height="40"
+      />
+    </a>
     <a href="/about">About</a>
-    <!-- <a href="/resume">Resume</a> -->
-    <a href="mailto:hello@kreindler.ca" data-astro-prefetch="false">Contact</a>
+    <a href="#">Resume</a>
+    <a href="#contactSection">Contact</a>
   </div>
+  <div class="section">
+    <h3 class="sectionTitle">Photography</h3>
+    <!-- Get all the names of the photography tiles and map them -->
+    {
+      projectNames
+        .filter((project) => project.fields.projectType === 'Photography')
+        .map((project) => (
+          <a href={`/projects/${project.slug}`}>{project.title}</a>
+        ))
+    }
+    <h3 class="sectionTitle">Builds</h3>
+    <!-- Get all the names of the build projects and map them -->
+    {
+      projectNames
+        .filter((project) => project.fields.projectType === 'Build')
+        .map((project) => (
+          <a href={`/projects/${project.slug}`}>{project.title}</a>
+        ))
+    }
+  </div>
+  <div class="section" id="contactSection">
+    <h3 class="sectionTitle">Contact</h3>
+    <a href="mailto:hello@kreindler.ca" data-astro-prefetch="false">Email</a>
+    <a href="https://github.com/Orbitally" data-astro-prefetch="false">GitHub</a
+    >
+    <a href="https://instagram.com/cameracob" data-astro-prefetch="false"
+      >Instagram</a
+    >
+    <a href="https://linkedin.com/in/jacobkreindler" data-astro-prefetch="false"
+      >LinkedIn</a
+    >
+  </div>
+  <style>
+    .navbar {
+      display: flex;
+      flex-direction: column;
+      font-size: 18px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: black;
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 25px;
+      border-bottom: var(--lightgrey) solid 2.5px;
+    }
+    /* No border for last sidebar item to make it more spacious */
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    #headerSection a {
+      font-size: 24px;
+      font-weight: bold;
+      color: black;
+      text-decoration: none;
+    }
+
+    .sectionTitle {
+      font-size: 20px;
+      color: var(--lightgrey);
+      margin-bottom: 5px;
+    }
+    /* All the selectable links in the sections */
+    .section a {
+      font-size: 18px;
+      color: var(--darkgrey);
+      width: fit-content;
+      text-decoration: none;
+      background-image: linear-gradient(var(--lightgrey), var(--lightgrey));
+      background-size: 0% 0.1em;
+      background-position-y: 100%;
+      background-position-x: 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.2s ease-in-out;
+    }
+    .section a:hover,
+    a:focus,
+    a:active {
+      background-size: 100% 0.1em;
+      background-position-x: 0%;
+    }
+
+    /* Logo image at the top */
+    .logo {
+      background-image: none !important;
+    }
+
+    .logo img {
+      background-color: var(--lightgrey);
+      border: 2px solid transparent;
+      padding: 10px;
+      border-radius: 8px;
+      transition-duration: 200ms;
+    }
+
+    .logo img:hover {
+      background-color: transparent;
+      border: 2px solid var(--lightgrey);
+      transition-duration: 200ms;
+    }
+
+    img {
+      filter: grayscale(100%);
+      transition-duration: 200ms;
+    }
+    img:hover {
+      filter: grayscale(0%);
+      transition-duration: 200ms;
+    }
+    @media (hover: none) {
+      img {
+        filter: none !important;
+      }
+    }
+  </style>
 </div>
-
-<style>
-  @media screen and (max-width: 483px) {
-    .navbar {
-      position: fixed !important;
-      top: 0;
-      left: 0;
-    }
-  }
-
-  @media screen and (max-width: 630px) {
-    .navbar {
-      flex-direction: column !important;
-      align-items: center;
-      padding-top: 3vh !important;
-    }
-    .navbar .leftside {
-      margin-left: 0px !important;
-    }
-    .navbar .rightside {
-      margin-right: 0px !important;
-    }
-  }
-
-  .navbar {
-    display: flex;
-    position: fixed;
-    top: 0;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100vw;
-    z-index: 5;
-    font-size: 18px;
-    line-height: normal;
-    padding-top: 5vh;
-    padding-bottom: 0.5vh;
-
-    /* Blur effect */
-    padding-bottom: 50px !important;
-    backdrop-filter: blur(5px);
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  }
-  .navbar a {
-    text-decoration: none;
-    color: black;
-    padding: 0.5rem;
-    transition-duration: 500ms;
-    font-size: 21px;
-  }
-  .navbar a:hover {
-    color: black;
-    -webkit-text-fill-color: white;
-    -webkit-text-stroke: 1px black;
-    font-size: 21px;
-    transition-duration: 500ms;
-  }
-  .navbar img {
-    filter: grayscale(100%);
-    transition-duration: 500ms;
-  }
-  .navbar img:hover {
-    filter: grayscale(0%);
-    transition-duration: 500ms;
-  }
-  @media (hover: none) {
-    .navbar img {
-      filter: none !important;
-    }
-  }
-  .navbar .leftside {
-    float: left;
-    margin-left: 75px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .navbar .rightside {
-    float: right;
-    margin-right: 75px;
-  }
-  #funtext {
-    color: black;
-    -webkit-text-fill-color: white;
-    -webkit-text-stroke: 1px black;
-  }
-  #funtext:hover {
-    color: black;
-    -webkit-text-fill-color: black;
-    -webkit-text-stroke: 0px;
-  }
-</style>
